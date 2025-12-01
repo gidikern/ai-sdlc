@@ -2,111 +2,124 @@
 
 An AI-native Software Development Lifecycle framework powered by specialized Claude Code agents.
 
-## Overview
+## Philosophy
 
-This framework provides a structured approach to software development using AI agents with specialized roles. Each agent is a Claude Code skill with domain-specific knowledge, workflows, and tools.
+1. **Think before you build** - Strong discovery and definition before any code
+2. **Agents are specialists** - Each agent focuses on their domain expertise
+3. **Explicit handoffs** - Clear deliverables between phases
+4. **Documentation-driven** - All decisions and requirements are documented
+5. **Iterative improvement** - The framework evolves with real usage
 
-## Agent Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                      AI SDLC Workflow                           │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐ │
-│  │ Product  │───▶│Architect │───▶│Developer │───▶│ Reviewer │ │
-│  │ Manager  │    │          │    │          │    │          │ │
-│  └──────────┘    └──────────┘    └──────────┘    └──────────┘ │
-│       │              │               │               │         │
-│       ▼              ▼               ▼               ▼         │
-│    PRD.md        ADR/*.md        src/*           reviews/*     │
-│    epics.md      architecture.md                              │
-│    user-stories/ tech-spec.md                                 │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-## Skills
-
-| Skill | Role | Outputs |
-|-------|------|---------|
-| `product-manager` | Define vision, requirements, user stories | PRD, epics, user stories |
-| `architect` | System design, tech decisions, API contracts | ADRs, architecture docs, tech specs |
-| `developer` | Implementation, coding standards | Source code, tests |
-| `reviewer` | Code review, quality assurance | Review reports, suggestions |
-
-## Installation
-
-Copy the `skills/` directory to your Claude Code skills location:
-
-```bash
-# For project-specific skills
-cp -r skills/ /path/to/your/project/.claude/skills/
-
-# Or for user-wide skills
-cp -r skills/ ~/.claude/skills/
-```
-
-## Usage
-
-Each skill is triggered by context. Examples:
+## Core Workflow
 
 ```
-User: "Let's define the product requirements for a health coaching app"
-→ Triggers: product-manager skill
+┌─────────────────────────────────────────────────────────────────────┐
+│                    FOUNDATION PHASE                                  │
+│                                                                      │
+│   Product Manager                          Architect                 │
+│   ┌─────────────┐      ┌─────────────┐      ┌─────────────┐        │
+│   │  Discovery  │─────▶│ Definition  │─────▶│ Architecture│        │
+│   │   Mode      │      │   Mode      │      │             │        │
+│   └─────────────┘      └─────────────┘      └─────────────┘        │
+│         │                    │                    │                 │
+│         ▼                    ▼                    ▼                 │
+│    discovery.md          prd.md              architecture.md       │
+│                       user-stories/          adr/*.md              │
+│                                              tech-spec.md          │
+└─────────────────────────────────────────────────────────────────────┘
+                              │
+                              │ Only when foundation is solid
+                              ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                  IMPLEMENTATION PHASE                                │
+│                                                                      │
+│   ┌─────────────┐                          ┌─────────────┐          │
+│   │  Developer  │─────────────────────────▶│  Reviewer   │          │
+│   └─────────────┘                          └─────────────┘          │
+│         │                                        │                  │
+│         ▼                                        ▼                  │
+│      src/*                                   reviews/*              │
+│      tests/*                                                        │
+└─────────────────────────────────────────────────────────────────────┘
+```
 
-User: "Design the system architecture for this product"
-→ Triggers: architect skill
+## Agents
 
-User: "Implement the user authentication module"
-→ Triggers: developer skill
+| Agent | Role | Modes/Focus |
+|-------|------|-------------|
+| **Product Manager** | Define what to build and why | Discovery Mode → Definition Mode |
+| **Architect** | Design how to build it | System design, tech decisions, APIs |
+| **Developer** | Implement the solution | Code, tests, documentation |
+| **Reviewer** | Ensure quality | Code review, security, standards |
 
-User: "Review the authentication code"
-→ Triggers: reviewer skill
+## Workflows
+
+| Workflow | When to Use |
+|----------|-------------|
+| `discovery-to-architecture.md` | Starting a new product or major feature |
+| `new-feature.md` | Adding features to existing product |
+
+## Quick Start
+
+### 1. Start Discovery
+```
+"I want to build a health coaching app"
+→ Product Manager (Discovery Mode) activates
+→ Explores problem, users, solution space
+→ Creates discovery.md
+```
+
+### 2. Define Product
+```
+"Let's define what we're building"
+→ Product Manager (Definition Mode) activates
+→ Creates PRD, user stories, backlog
+→ Hands off to Architect
+```
+
+### 3. Design Architecture
+```
+"Design the architecture"
+→ Architect activates
+→ Creates architecture docs, ADRs, tech spec
+→ Ready for implementation
 ```
 
 ## Project Structure
 
 ```
-ai-sdlc/
-├── README.md
-├── skills/
-│   ├── product-manager/
-│   │   ├── SKILL.md
-│   │   └── references/
-│   │       ├── prd-template.md
-│   │       ├── user-story-template.md
-│   │       └── prioritization.md
-│   ├── architect/
-│   │   ├── SKILL.md
-│   │   └── references/
-│   │       ├── adr-template.md
-│   │       ├── architecture-patterns.md
-│   │       └── tech-evaluation.md
-│   ├── developer/
-│   │   ├── SKILL.md
-│   │   └── references/
-│   │       ├── coding-standards.md
-│   │       ├── testing-guide.md
-│   │       └── commit-conventions.md
-│   └── reviewer/
-│       ├── SKILL.md
-│       └── references/
-│           ├── review-checklist.md
-│           └── security-checklist.md
-├── workflows/
-│   ├── new-feature.md
-│   ├── bug-fix.md
-│   └── release.md
-└── templates/
-    └── project-init/
-        ├── docs/
-        └── .claude/
+your-project/
+├── .claude/
+│   └── settings.json       # Points to ai-sdlc skills
+├── docs/
+│   ├── product/
+│   │   ├── discovery.md    # Problem exploration
+│   │   ├── prd.md          # Product requirements
+│   │   ├── backlog.md      # Prioritized work
+│   │   └── user-stories/   # Detailed stories
+│   ├── architecture/
+│   │   ├── architecture.md # System design
+│   │   ├── tech-spec.md    # Technical details
+│   │   ├── adr/            # Decision records
+│   │   └── api/            # API specs
+│   └── reviews/            # Code review reports
+├── src/                    # Source code
+└── tests/                  # Test files
 ```
 
-## Philosophy
+## Installation
 
-1. **Agents are specialists** - Each agent focuses on their domain expertise
-2. **Handoffs are explicit** - Clear deliverables between phases
-3. **Documentation-driven** - All decisions and requirements are documented
-4. **Iterative improvement** - The framework evolves with usage
+```bash
+# Clone this repo
+git clone https://github.com/YOUR_USERNAME/ai-sdlc.git
+
+# In your project, create .claude/settings.json:
+{
+  "skills": [
+    { "path": "/path/to/ai-sdlc/skills/product-manager" },
+    { "path": "/path/to/ai-sdlc/skills/architect" },
+    { "path": "/path/to/ai-sdlc/skills/developer" },
+    { "path": "/path/to/ai-sdlc/skills/reviewer" }
+  ]
+}
+```
