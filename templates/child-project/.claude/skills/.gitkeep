@@ -1,0 +1,3 @@
+# Local skill overrides
+# Create a skill with the same name as an ai-sdlc skill to override it
+# Example: .claude/skills/developer/SKILL.md overrides ai-sdlc/skills/developer

@@ -24,7 +24,7 @@ This project uses [ai-sdlc](./ai-sdlc/) as a git submodule for:
 
 ### Local Overrides
 
-To override a base skill, create `skills/<skill-name>/SKILL.md` in this project.
+To override a base skill, create `.claude/skills/<skill-name>/SKILL.md` in this project.
 
 Currently overridden:
 - (none)
@@ -72,8 +72,8 @@ See `docs/architecture/adr/` for Architecture Decision Records.
 ├── ai-sdlc/              ← Submodule (do not edit directly)
 ├── .claude/
 │   ├── settings.json     ← Skill configuration
-│   └── commands/         ← Project-specific commands
-├── skills/               ← Local skill overrides
+│   ├── commands/         ← Project-specific commands
+│   └── skills/           ← Local skill overrides
 ├── docs/
 │   ├── product/          ← PRD, discovery, user stories
 │   └── architecture/     ← System design, ADRs
