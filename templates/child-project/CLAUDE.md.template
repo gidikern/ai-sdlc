@@ -1,0 +1,102 @@
+# {{PROJECT_NAME}}
+
+> **Base Framework**: ai-sdlc @ {{AI_SDLC_VERSION}}
+
+## Project Overview
+
+{{PROJECT_DESCRIPTION}}
+
+## AI-SDLC Integration
+
+This project uses [ai-sdlc](./ai-sdlc/) as a git submodule for:
+- Agent skills (Product Manager, Architect, Developer, Reviewer)
+- Workflows (Discovery → Architecture → Implementation)
+- Development standards
+
+### Inherited Skills
+
+| Skill | Source | Status |
+|-------|--------|--------|
+| product-manager | ai-sdlc | ✅ Using base |
+| architect | ai-sdlc | ✅ Using base |
+| developer | ai-sdlc | ✅ Using base |
+| reviewer | ai-sdlc | ✅ Using base |
+
+### Local Overrides
+
+To override a base skill, create `skills/<skill-name>/SKILL.md` in this project.
+
+Currently overridden:
+- (none)
+
+## Project-Specific Context
+
+### Domain
+
+{{DOMAIN_CONTEXT}}
+
+### Technical Constraints
+
+{{TECHNICAL_CONSTRAINTS}}
+
+### Key Decisions
+
+See `docs/architecture/adr/` for Architecture Decision Records.
+
+## Workflows
+
+### Starting New Work
+
+1. **New feature/product**: Start with Discovery
+   ```
+   "Let's explore [feature/idea]"
+   → Product Manager (Discovery Mode)
+   ```
+
+2. **Ready to define**: Move to Definition
+   ```
+   "Let's define what we're building"
+   → Product Manager (Definition Mode)
+   ```
+
+3. **Ready to design**: Move to Architecture
+   ```
+   "Design the architecture"
+   → Architect
+   ```
+
+### Project Structure
+
+```
+{{PROJECT_NAME}}/
+├── ai-sdlc/              ← Submodule (do not edit directly)
+├── .claude/
+│   ├── settings.json     ← Skill configuration
+│   └── commands/         ← Project-specific commands
+├── skills/               ← Local skill overrides
+├── docs/
+│   ├── product/          ← PRD, discovery, user stories
+│   └── architecture/     ← System design, ADRs
+└── src/                  ← Source code
+```
+
+## Commands
+
+Base commands from ai-sdlc:
+- (Available when working in ai-sdlc submodule)
+
+Project commands:
+- (Add project-specific commands in .claude/commands/)
+
+## Updating ai-sdlc
+
+To update to a newer version:
+
+```bash
+cd ai-sdlc
+git fetch --tags
+git checkout v1.x.x  # desired version
+cd ..
+git add ai-sdlc
+git commit -m "chore: update ai-sdlc to v1.x.x"
+```
