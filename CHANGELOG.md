@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Architect skill with ADR, domain modeling, and tech evaluation support
 - Developer skill with coding standards, testing guide, commit conventions
 - Reviewer skill with review and security checklists
+- **Legal Consultant skill** for early-stage legal risk assessment
+  - Identifies regulatory concerns during product discovery/definition
+  - Covers compliance domains: GDPR, CCPA, employment law, AI regulations
+  - HR tech specific guidance (EEOC, disparate impact, ban-the-box, etc.)
+  - Risk assessment templates with severity levels
+  - Jurisdiction considerations for multi-market products
+  - References: compliance-domains.md, legal-risk-template.md, jurisdiction-considerations.md
 - Discovery-to-Architecture workflow
 - New Feature workflow
 - Commands: /new-skill, /validate-skill, /release, /init-project
@@ -42,6 +49,7 @@ Initial release.
 - **architect**: System design, ADRs, domain modeling, tech evaluation
 - **developer**: Implementation, coding standards, testing, commits
 - **reviewer**: Code review, security review
+- **legal-consultant**: Early-stage legal risk assessment, compliance guidance
 
 ### Workflows
 - **discovery-to-architecture**: Full pre-implementation flow
