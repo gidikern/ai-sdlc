@@ -33,19 +33,25 @@ ai-sdlc version: <latest tag or user-specified>
 ### 3. Create Project Structure
 
 ```bash
-mkdir -p ./projects/<project-name>/{.claude/commands,.claude/skills,docs/product/user-stories,docs/architecture/adr,src,tests}
+mkdir -p ./projects/<project-name>/{.claude/commands,.claude/skills,docs/product/user-stories,docs/architecture/adr,docs/legal,src,tests}
 ```
 
 ### 4. Initialize Git and Add Submodule
 
-```bash
-cd ./projects/<project-name>
-git init
+Use chained commands with `&&` to ensure each step succeeds before proceeding:
 
-# Add ai-sdlc as submodule
-git submodule add <ai-sdlc-repo-url> ai-sdlc
-cd ai-sdlc && git checkout <version> && cd ..
+```bash
+# Initialize git and add submodule
+cd ./projects/<project-name> && \
+  git init && \
+  git submodule add <ai-sdlc-repo-url> ai-sdlc
+
+# Checkout specific version
+cd ./projects/<project-name>/ai-sdlc && \
+  git checkout <version>
 ```
+
+**Important**: Each Bash tool invocation starts from the ai-sdlc root directory. Use `cd` with full path and chain commands with `&&` to maintain context.
 
 ### 5. Create Files from Templates
 
@@ -60,25 +66,28 @@ Replace placeholders:
 - `{{AI_SDLC_VERSION}}` → version tag
 - `{{DOMAIN_CONTEXT}}` → "To be defined during Discovery"
 - `{{TECHNICAL_CONSTRAINTS}}` → "To be defined during Architecture"
-- `{{REPO_URL}}` → "TBD - update after creating remote repo"
+- `{{REPO_URL}}` → "TBD - will be updated after GitHub creation"
 - `{{LICENSE}}` → "TBD"
 
 ### 6. Create Placeholder Files
 
 ```bash
-touch .claude/commands/.gitkeep
-touch .claude/skills/.gitkeep
-touch docs/product/user-stories/.gitkeep
-touch docs/architecture/adr/.gitkeep
-touch src/.gitkeep
-touch tests/.gitkeep
+cd ./projects/<project-name> && \
+  touch .claude/commands/.gitkeep \
+        .claude/skills/.gitkeep \
+        docs/product/user-stories/.gitkeep \
+        docs/architecture/adr/.gitkeep \
+        docs/legal/.gitkeep \
+        src/.gitkeep \
+        tests/.gitkeep
 ```
 
 ### 7. Initial Commit
 
 ```bash
-git add .
-git commit -m "chore: initialize project with ai-sdlc framework"
+cd ./projects/<project-name> && \
+  git add . && \
+  git commit -m "chore: initialize project with ai-sdlc framework"
 ```
 
 ### 8. Create GitHub Repository (if requested)
@@ -86,13 +95,16 @@ git commit -m "chore: initialize project with ai-sdlc framework"
 If user chose to create GitHub repo:
 
 ```bash
-cd ./projects/<project-name>
+cd ./projects/<project-name> && \
+  gh repo create <project-name> --<public|private> --source=. --push
 
-# Create repo (public or private based on user choice)
-gh repo create <project-name> --<public|private> --source=. --push
-
-# Update README.md with actual repo URL
-# Replace {{REPO_URL}} placeholder with actual GitHub URL
+# After creation, update README.md with actual repo URL
+cd ./projects/<project-name> && \
+  # Replace {{REPO_URL}} or "TBD" with https://github.com/<user>/<project-name>.git
+  # Then commit and push the update
+  git add README.md && \
+  git commit -m "docs: update README with GitHub repo URL" && \
+  git push
 ```
 
 ### 9. Register in siblings.json
