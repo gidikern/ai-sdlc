@@ -4,6 +4,7 @@
     { "path": "./ai-sdlc/skills/architect" },
     { "path": "./ai-sdlc/skills/developer" },
     { "path": "./ai-sdlc/skills/reviewer" },
+    { "path": "./ai-sdlc/skills/legal-consultant" },
     { "path": "./.claude/skills", "_comment": "Local overrides - same name replaces base" }
   ],
   "commands": {
