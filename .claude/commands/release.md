@@ -22,13 +22,15 @@ Prompt user to confirm:
 ```markdown
 ## Pre-Release Checklist for [version]
 
-### Documentation
-- [ ] CHANGELOG.md updated with changes
-- [ ] README.md is current
-- [ ] All skills have valid SKILL.md
+### Documentation (User Responsibility)
+- [ ] CHANGELOG.md updated with all changes under [Unreleased]
+- [ ] README.md agents table is current (if new skills added)
+- [ ] CLAUDE.md updated (if framework structure changed)
+- [ ] All skills registered in both settings files
 
 ### Quality
-- [ ] All skills validated (`/validate-skill` passed)
+- [ ] All skills have valid SKILL.md
+- [ ] Run `/validate-skill` on any new/modified skills
 - [ ] Tested on at least one child project
 - [ ] No known breaking issues
 
@@ -38,6 +40,12 @@ Prompt user to confirm:
 
 Confirm release? (yes/no)
 ```
+
+**Note**: The `/release` command does NOT automatically update documentation files.
+These must be updated manually BEFORE running `/release`:
+- `CHANGELOG.md` - Add changes under [Unreleased]
+- `README.md` - Update agents table, commands, etc.
+- `CLAUDE.md` - Update if framework structure changed
 
 ### 3. Create and Push Tag
 

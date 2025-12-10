@@ -92,10 +92,30 @@ Add the new skill to both settings files:
 { "path": "./ai-sdlc/skills/<skill-name>" }
 ```
 
+### Update Documentation
+
+After registering the skill, update these files:
+
+3. **`CHANGELOG.md`** - Add entry under `[Unreleased]` → `Added`:
+```markdown
+- **[Skill Name] skill** for [purpose]
+  - [Key feature 1]
+  - [Key feature 2]
+```
+
+4. **`README.md`** - Add to the Agents table:
+```markdown
+| **[Skill Name]** | [Role description] | [Focus areas] |
+```
+
 ### Remind the User
 
 1. Fill in the TODO sections in SKILL.md
 2. Add references if needed
 3. Test the skill on a real project
-4. Update CHANGELOG.md
-5. Verify skill is registered in both settings files (run `/validate-skill`)
+4. Verify all documentation is updated:
+   - [ ] `.claude/settings.json`
+   - [ ] `templates/child-project/.claude/settings.json.template`
+   - [ ] `CHANGELOG.md`
+   - [ ] `README.md` agents table
+5. Run `/validate-skill skills/<skill-name>` to verify structure

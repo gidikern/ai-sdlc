@@ -10,29 +10,50 @@ Provide reusable AI agent skills, workflows, and commands that other projects in
 
 ```
 ai-sdlc/
-├── skills/          # Agent definitions (Product Manager, Architect, etc.)
-├── workflows/       # Multi-phase processes
+├── skills/           # Agent definitions (Product Manager, Architect, etc.)
+├── workflows/        # Multi-phase processes
+├── projects/         # Local projects (gitignored) - each has ai-sdlc as submodule
 ├── .claude/
 │   ├── settings.json
-│   └── commands/    # CLI commands for skill development
-└── templates/       # Scaffolding for child projects
+│   ├── siblings.json # Tracks projects for auto-update on release
+│   └── commands/     # CLI commands for skill development
+└── templates/        # Scaffolding for child projects
 ```
 
-## When Used as Submodule
+## Project Management
 
-Child projects include ai-sdlc as a git submodule and reference its skills:
+### Creating Projects
+
+All projects live under `projects/` (gitignored). Each project:
+- Has its own git repo
+- Uses ai-sdlc as a submodule (from GitHub)
+- Is registered in `.claude/siblings.json`
+
+```bash
+/init-project my-startup
+# Creates: projects/my-startup/ with ai-sdlc submodule
+# Registers in siblings.json
+```
+
+### Syncing Changes to Projects
+
+After making skill changes:
+1. Commit and push to GitHub
+2. Run `/release v1.x.x` to tag and auto-update all projects
+3. Or manually in each project: `/update-sub-sdlc`
+
+### siblings.json
+
+Controls which projects get auto-updated on release:
 
 ```json
-// child-project/.claude/settings.json
 {
-  "skills": [
-    { "path": "./ai-sdlc/skills/product-manager" },
-    { "path": "./ai-sdlc/skills/architect" }
+  "projects": [
+    { "path": "./projects/my-startup", "autoUpdate": true },
+    { "path": "./projects/experimental", "autoUpdate": false }
   ]
 }
 ```
-
-**Override behavior**: If child project has `skills/product-manager/SKILL.md`, it fully replaces the base version.
 
 ## Development Guidelines
 
@@ -40,32 +61,39 @@ Child projects include ai-sdlc as a git submodule and reference its skills:
 
 1. Skills are in `skills/<name>/SKILL.md`
 2. Keep SKILL.md under 500 lines - use `references/` for details
-3. Test changes on a real child project before committing
+3. Test changes on a real project before committing
 4. Update CHANGELOG.md
+5. Run `/validate-skill` to check structure
 
 ### Creating New Skills
 
 Use command: `/new-skill <name>`
 
-Or manually:
-```
-skills/<name>/
-├── SKILL.md           # Required: frontmatter + instructions
-└── references/        # Optional: detailed guides
-```
+This will:
+1. Create `skills/<name>/SKILL.md` with template
+2. Create `skills/<name>/references/` directory
+3. Remind you to register in both settings files
+
+After creation, you must:
+1. Fill in SKILL.md content
+2. Add to `.claude/settings.json`
+3. Add to `templates/child-project/.claude/settings.json.template`
+4. Update CHANGELOG.md
+5. Update README.md (agents table)
 
 ### Creating Commands
 
 Commands go in `.claude/commands/<name>.md`:
 
 ```markdown
----
-name: command-name
-description: What this command does
----
+# /command-name
 
-# Command: /command-name
+Description of what this command does.
 
+## Usage
+/command-name <args>
+
+## Behavior
 [Instructions for Claude when command is invoked]
 ```
 
@@ -74,14 +102,16 @@ description: What this command does
 We use semantic versioning with git tags:
 
 - **MAJOR** (v2.0.0): Breaking changes to skill interfaces
-- **MINOR** (v1.1.0): New skills, workflows, or backward-compatible changes  
+- **MINOR** (v1.1.0): New skills, workflows, or backward-compatible changes
 - **PATCH** (v1.0.1): Bug fixes, documentation updates
 
 To release:
 ```bash
-# Update CHANGELOG.md, then:
-git tag v1.x.x
-git push origin v1.x.x
+/release v1.x.x
+# This will:
+# 1. Validate and create tag
+# 2. Push to GitHub
+# 3. Update all autoUpdate:true projects
 ```
 
 ### Quality Checklist
@@ -92,29 +122,27 @@ Before committing skill changes:
 - [ ] Instructions are actionable, not vague
 - [ ] References exist for detailed content
 - [ ] Tested on real project usage
+- [ ] Registered in both settings files
+- [ ] CHANGELOG.md updated
+- [ ] README.md agents table updated (if new skill)
 
 ## Commands
 
-- `/new-skill <name>` - Scaffold a new skill
-- `/validate-skill <path>` - Check skill structure and quality
-- `/release <version>` - Create a new release
+| Command | Purpose |
+|---------|---------|
+| `/new-skill <name>` | Scaffold a new skill |
+| `/validate-skill <path>` | Check skill structure and quality |
+| `/release <version>` | Create release and update all projects |
+| `/init-project <name>` | Create new project under projects/ |
+| `/update-sub-sdlc [version]` | Update ai-sdlc submodule in current project |
 
-## Child Project Template
+## Documentation Responsibilities
 
-To create a new project using ai-sdlc:
-
-```bash
-# Copy template
-cp -r templates/child-project my-project
-cd my-project
-
-# Add ai-sdlc as submodule
-git init
-git submodule add -b v1.0.0 git@github.com:USER/ai-sdlc.git
-
-# Update settings.json paths
-# Edit CLAUDE.md for your project
-
-git add .
-git commit -m "chore: initial setup with ai-sdlc"
-```
+| File | Updated By | When |
+|------|------------|------|
+| `CHANGELOG.md` | Manual / `/new-skill` reminder | Every change |
+| `README.md` | Manual | New skills, workflow changes |
+| `CLAUDE.md` | Manual | Framework structure changes |
+| `.claude/settings.json` | `/new-skill` reminder | New skills |
+| `templates/.../settings.json.template` | `/new-skill` reminder | New skills |
+| `.claude/siblings.json` | `/init-project` | New projects |
