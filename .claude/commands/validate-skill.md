@@ -27,6 +27,9 @@ Validate a skill's structure and quality.
 - [ ] References are linked from SKILL.md
 - [ ] No orphaned reference files
 
+### Registration
+- [ ] Skill is listed in `templates/child-project/.claude/settings.json.template`
+
 ## Output
 
 Report validation results:
