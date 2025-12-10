@@ -31,10 +31,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `/init-project` now creates projects under `projects/` with submodule setup
   - `/release` now auto-updates all registered projects with `autoUpdate: true`
   - `/validate-skill` now checks skill is registered in settings.json.template
+- `/prepare-release` command to review commits and update CHANGELOG before releases
+- GitHub repository auto-creation in `/init-project` (with public/private option)
 
 ### Changed
 - `/init-project` simplified to create projects under `projects/` directory
+- `/init-project` now uses chained commands to maintain directory context
 - `/release` enhanced to update all registered sibling projects
+- `/validate-skill` now checks skill registration in both settings files
+- Documentation structure updated with project management workflow
 
 ### Deprecated
 - (none yet)
@@ -43,7 +48,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (none yet)
 
 ### Fixed
-- (none yet)
+- Directory context loss in `/init-project` by using chained commands
+- legal-consultant skill registration in `.claude/settings.json`
 
 ### Security
 - (none yet)
