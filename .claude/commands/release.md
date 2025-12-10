@@ -1,13 +1,13 @@
 # /release
 
-Create a new versioned release of ai-sdlc.
+Create a new versioned release of ai-sdlc and optionally update all registered projects.
 
 ## Usage
 ```
 /release <version>
 ```
 
-Example: `/release v1.1.0`
+Example: `/release v1.2.0`
 
 ## Behavior
 
@@ -39,26 +39,72 @@ Prompt user to confirm:
 Confirm release? (yes/no)
 ```
 
-### 3. If Confirmed
-
-Guide user through:
+### 3. Create and Push Tag
 
 ```bash
 # Ensure everything is committed
 git status
 
 # Create annotated tag
-git tag -a v1.x.x -m "Release v1.x.x: [brief description]"
+git tag -a <version> -m "Release <version>: [brief description]"
 
-# Push tag
-git push origin v1.x.x
+# Push commits and tag
+git push origin main
+git push origin <version>
 ```
 
-### 4. Post-Release
+### 4. Update Registered Projects
 
-Remind user:
-- Update child projects to new version if desired
-- Announce changes to team (if applicable)
+Read `.claude/siblings.json` and for each project with `autoUpdate: true`:
+
+```bash
+cd <project-path>
+
+# Run update-sub-sdlc logic
+cd ai-sdlc
+git fetch --tags origin
+git checkout <version>
+cd ..
+
+# Commit the submodule update
+git add ai-sdlc
+git commit -m "chore: update ai-sdlc to <version>"
+```
+
+Display progress:
+```markdown
+## Updating Projects
+
+| Project | Status |
+|---------|--------|
+| projects/my-startup | ✅ Updated to <version> |
+| projects/another-project | ✅ Updated to <version> |
+| projects/experimental | ⏭️ Skipped (autoUpdate: false) |
+```
+
+### 5. Post-Release Summary
+
+```markdown
+## Release Complete: <version>
+
+### ai-sdlc
+- Tag `<version>` created and pushed
+
+### Projects Updated
+- projects/my-startup → <version>
+- projects/another-project → <version>
+
+### Projects Skipped
+- projects/experimental (autoUpdate: false)
+
+### Next Steps
+- Push project changes to their remotes if desired:
+  \`\`\`bash
+  cd projects/my-startup && git push
+  cd projects/another-project && git push
+  \`\`\`
+- Announce release to team (if applicable)
+```
 
 ## Version Guidelines
 
@@ -67,3 +113,20 @@ Remind user:
 | Breaking skill interface changes | MAJOR | v1.0.0 → v2.0.0 |
 | New skills or workflows | MINOR | v1.0.0 → v1.1.0 |
 | Bug fixes, doc updates | PATCH | v1.0.0 → v1.0.1 |
+
+## siblings.json Format
+
+Located at `.claude/siblings.json`:
+
+```json
+{
+  "description": "Projects managed by ai-sdlc. Used by /release to auto-update submodules.",
+  "projects": [
+    { "path": "./projects/my-startup", "autoUpdate": true },
+    { "path": "./projects/experimental", "autoUpdate": false }
+  ]
+}
+```
+
+- `path`: Relative path from ai-sdlc root to the project
+- `autoUpdate`: If `true`, `/release` will update this project's submodule

@@ -24,9 +24,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New Feature workflow
 - Commands: /new-skill, /validate-skill, /release, /init-project
 - Child project template
+- **Project management infrastructure**:
+  - `projects/` directory for local projects (gitignored)
+  - `.claude/siblings.json` for tracking projects and auto-update settings
+  - `/update-sub-sdlc [version]` command to sync submodule (pull latest or checkout version)
+  - `/init-project` now creates projects under `projects/` with submodule setup
+  - `/release` now auto-updates all registered projects with `autoUpdate: true`
+  - `/validate-skill` now checks skill is registered in settings.json.template
 
 ### Changed
-- (none yet)
+- `/init-project` simplified to create projects under `projects/` directory
+- `/release` enhanced to update all registered sibling projects
 
 ### Deprecated
 - (none yet)
@@ -58,5 +66,6 @@ Initial release.
 ### Commands
 - `/new-skill <name>`: Scaffold a new skill
 - `/validate-skill <path>`: Validate skill structure
-- `/release <version>`: Create versioned release
-- `/init-project <name>`: Initialize child project with ai-sdlc
+- `/release <version>`: Create versioned release and update projects
+- `/init-project <name>`: Initialize project under projects/ with ai-sdlc submodule
+- `/update-sub-sdlc [version]`: Update ai-sdlc submodule in current project

@@ -1,3 +1,6 @@
 .DS_Store
 *.pyc
 __pycache__/
+
+# Local experiment projects (use sibling directories for real projects)
+projects/
