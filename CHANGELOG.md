@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- (none yet)
+
+### Changed
+- (none yet)
+
+### Fixed
+- (none yet)
+
+## [v1.2.0] - 2025-12-10
+
+### Added
 - Initial framework structure
 - Product Manager skill with Discovery and Definition modes
 - Architect skill with ADR, domain modeling, and tech evaluation support
