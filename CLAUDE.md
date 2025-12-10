@@ -107,11 +107,11 @@ We use semantic versioning with git tags:
 
 To release:
 ```bash
+# 1. Prepare CHANGELOG (review commits, update [Unreleased])
+/prepare-release
+
+# 2. Create release (moves [Unreleased] to version, tags, pushes, updates projects)
 /release v1.x.x
-# This will:
-# 1. Validate and create tag
-# 2. Push to GitHub
-# 3. Update all autoUpdate:true projects
 ```
 
 ### Quality Checklist
@@ -132,6 +132,7 @@ Before committing skill changes:
 |---------|---------|
 | `/new-skill <name>` | Scaffold a new skill |
 | `/validate-skill <path>` | Check skill structure and quality |
+| `/prepare-release` | Review commits and update CHANGELOG [Unreleased] |
 | `/release <version>` | Create release and update all projects |
 | `/init-project <name>` | Create new project under projects/ |
 | `/update-sub-sdlc [version]` | Update ai-sdlc submodule in current project |
@@ -140,7 +141,7 @@ Before committing skill changes:
 
 | File | Updated By | When |
 |------|------------|------|
-| `CHANGELOG.md` | Manual / `/new-skill` reminder | Every change |
+| `CHANGELOG.md` | `/prepare-release` | Before every release |
 | `README.md` | Manual | New skills, workflow changes |
 | `CLAUDE.md` | Manual | Framework structure changes |
 | `.claude/settings.json` | `/new-skill` reminder | New skills |
