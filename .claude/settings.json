@@ -3,7 +3,8 @@
     { "path": "./skills/product-manager" },
     { "path": "./skills/architect" },
     { "path": "./skills/developer" },
-    { "path": "./skills/reviewer" }
+    { "path": "./skills/reviewer" },
+    { "path": "./skills/legal-consultant" }
   ],
   "commands": {
     "path": "./.claude/commands"

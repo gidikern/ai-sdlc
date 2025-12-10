@@ -28,7 +28,8 @@ Validate a skill's structure and quality.
 - [ ] No orphaned reference files
 
 ### Registration
-- [ ] Skill is listed in `templates/child-project/.claude/settings.json.template`
+- [ ] Skill is listed in `.claude/settings.json` (ai-sdlc's own settings)
+- [ ] Skill is listed in `templates/child-project/.claude/settings.json.template` (for child projects)
 
 ## Output
 

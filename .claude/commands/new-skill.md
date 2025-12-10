@@ -78,8 +78,24 @@ Ready for [next phase].
 
 ## After Creation
 
-Remind the user to:
+### Register the Skill
+
+Add the new skill to both settings files:
+
+1. **`.claude/settings.json`** (ai-sdlc's own settings):
+```json
+{ "path": "./skills/<skill-name>" }
+```
+
+2. **`templates/child-project/.claude/settings.json.template`** (for new projects):
+```json
+{ "path": "./ai-sdlc/skills/<skill-name>" }
+```
+
+### Remind the User
+
 1. Fill in the TODO sections in SKILL.md
 2. Add references if needed
 3. Test the skill on a real project
 4. Update CHANGELOG.md
+5. Verify skill is registered in both settings files (run `/validate-skill`)
