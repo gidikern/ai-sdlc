@@ -65,19 +65,22 @@ git push origin <version>
 
 Read `.claude/siblings.json` and for each project with `autoUpdate: true`:
 
+Use chained commands with full paths to maintain directory context:
+
 ```bash
-cd <project-path>
+# Update submodule to new version
+cd <project-path>/ai-sdlc && \
+  git fetch --tags origin && \
+  git checkout <version>
 
-# Run update-sub-sdlc logic
-cd ai-sdlc
-git fetch --tags origin
-git checkout <version>
-cd ..
-
-# Commit the submodule update
-git add ai-sdlc
-git commit -m "chore: update ai-sdlc to <version>"
+# Commit and push the submodule update
+cd <project-path> && \
+  git add ai-sdlc && \
+  git commit -m "chore: update ai-sdlc to <version>" && \
+  git push
 ```
+
+**Important**: Each Bash tool invocation starts from the ai-sdlc root directory. Use full relative paths (e.g., `./projects/haas/ai-sdlc`) and chain commands with `&&`.
 
 Display progress:
 ```markdown
