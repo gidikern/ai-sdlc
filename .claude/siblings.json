@@ -1,4 +1,6 @@
 {
   "description": "Projects managed by ai-sdlc. Used by /release to auto-update submodules.",
-  "projects": []
+  "projects": [
+    { "path": "./projects/haas", "autoUpdate": true }
+  ]
 }
