@@ -19,6 +19,8 @@ Ask the user:
 - Project name (from argument)
 - Brief project description
 - ai-sdlc version to use (default: latest tag, or `main` for bleeding edge)
+- Create GitHub repository? (Yes/No)
+- If Yes: Public or Private?
 
 ### 2. Determine Paths
 
@@ -79,7 +81,21 @@ git add .
 git commit -m "chore: initialize project with ai-sdlc framework"
 ```
 
-### 8. Register in siblings.json
+### 8. Create GitHub Repository (if requested)
+
+If user chose to create GitHub repo:
+
+```bash
+cd ./projects/<project-name>
+
+# Create repo (public or private based on user choice)
+gh repo create <project-name> --<public|private> --source=. --push
+
+# Update README.md with actual repo URL
+# Replace {{REPO_URL}} placeholder with actual GitHub URL
+```
+
+### 9. Register in siblings.json
 
 Add the new project to `.claude/siblings.json`:
 
@@ -92,13 +108,14 @@ Add the new project to `.claude/siblings.json`:
 }
 ```
 
-### 9. Output Summary
+### 10. Output Summary
 
 ```markdown
 ## Project Created: <project-name>
 
 **Location**: ./projects/<project-name>/
 **ai-sdlc version**: <version>
+**GitHub repo**: <repo-url if created, or "Not created">
 **Registered in**: .claude/siblings.json (autoUpdate: true)
 
 ### Structure Created
@@ -120,20 +137,22 @@ projects/<project-name>/
 
 ### Next Steps
 
-1. **Create GitHub repo** (optional):
-   \`\`\`bash
-   cd projects/<project-name>
-   gh repo create <project-name> --private --source=. --push
-   \`\`\`
-
-2. **Start working**:
+1. **Start working**:
    \`\`\`bash
    cd projects/<project-name>
    claude
    \`\`\`
 
-3. **Begin Discovery**:
+2. **Begin Discovery**:
    > "Let's explore [your product idea]"
+
+<if GitHub repo not created>
+3. **Create GitHub repo later** (optional):
+   \`\`\`bash
+   cd projects/<project-name>
+   gh repo create <project-name> --private --source=. --push
+   \`\`\`
+</if>
 ```
 
 ## Notes
@@ -142,3 +161,5 @@ projects/<project-name>/
 - Projects are gitignored from ai-sdlc repo but have their own git repos
 - Each project uses ai-sdlc as a submodule (fetched from GitHub)
 - New projects are auto-registered in siblings.json for `/release` updates
+- Requires `gh` CLI installed if creating GitHub repo
+- Check `gh auth status` before running if GitHub creation is desired
