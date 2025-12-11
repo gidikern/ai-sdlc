@@ -4,7 +4,11 @@
     { "path": "./skills/architect" },
     { "path": "./skills/developer" },
     { "path": "./skills/reviewer" },
-    { "path": "./skills/legal-consultant" }
+    { "path": "./skills/legal-consultant" },
+    { "path": "./skills/facilitator" },
+    { "path": "./skills/ux-researcher" },
+    { "path": "./skills/growth-strategist" },
+    { "path": "./skills/data-analyst" }
   ],
   "commands": {
     "path": "./.claude/commands"
