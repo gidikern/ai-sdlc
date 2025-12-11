@@ -65,22 +65,41 @@ git push origin <version>
 
 Read `.claude/siblings.json` and for each project with `autoUpdate: true`:
 
-Use chained commands with full paths to maintain directory context:
+**CRITICAL**: The Bash tool's working directory persists between invocations. To avoid directory context issues, use a single chained command per project that navigates to the absolute path.
 
+First, get the ai-sdlc root directory:
 ```bash
-# Update submodule to new version
-cd <project-path>/ai-sdlc && \
-  git fetch --tags origin && \
-  git checkout <version>
+AI_SDLC_ROOT=$(pwd)
+```
 
-# Commit and push the submodule update
-cd <project-path> && \
+Then for each project, use this single-command pattern:
+```bash
+# Update submodule and commit in one chained command
+cd $AI_SDLC_ROOT/<project-path>/ai-sdlc && \
+  git fetch --tags origin && \
+  git checkout <version> && \
+  cd .. && \
   git add ai-sdlc && \
   git commit -m "chore: update ai-sdlc to <version>" && \
   git push
 ```
 
-**Important**: Each Bash tool invocation starts from the ai-sdlc root directory. Use full relative paths (e.g., `./projects/haas/ai-sdlc`) and chain commands with `&&`.
+Example for `./projects/haas`:
+```bash
+cd $AI_SDLC_ROOT/projects/haas/ai-sdlc && \
+  git fetch --tags origin && \
+  git checkout v1.2.1 && \
+  cd .. && \
+  git add ai-sdlc && \
+  git commit -m "chore: update ai-sdlc to v1.2.1" && \
+  git push
+```
+
+**Why this pattern**:
+- Single chained command ensures all steps happen in correct context
+- Using `$AI_SDLC_ROOT` makes it work from any starting directory
+- `cd ..` after updating submodule returns to project root for commit
+- No reliance on Bash tool returning to a specific directory
 
 Display progress:
 ```markdown

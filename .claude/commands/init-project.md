@@ -22,34 +22,40 @@ Ask the user:
 - Create GitHub repository? (Yes/No)
 - If Yes: Public or Private?
 
-### 2. Determine Paths
+### 2. Determine Paths and Capture ai-sdlc Root
 
+```bash
+# Capture ai-sdlc root directory for all subsequent commands
+AI_SDLC_ROOT=$(pwd)
 ```
-Project location: ./projects/<project-name>/
+
+Then determine:
+```
+Project location: $AI_SDLC_ROOT/projects/<project-name>/
 ai-sdlc repo URL: <from git remote get-url origin>
 ai-sdlc version: <latest tag or user-specified>
 ```
 
+**CRITICAL**: The Bash tool's working directory **persists** between invocations - it does NOT reset to ai-sdlc root. Capture `AI_SDLC_ROOT` at the beginning and use it in all subsequent commands to ensure reliability.
+
 ### 3. Create Project Structure and Initialize Git
 
-Use chained commands to create the structure and initialize git in one invocation:
+Use chained commands with `$AI_SDLC_ROOT` to ensure correct paths:
 
 ```bash
 # Create base directory and subdirectories, then initialize git
-mkdir -p ./projects/<project-name> && \
-  cd ./projects/<project-name> && \
+mkdir -p $AI_SDLC_ROOT/projects/<project-name> && \
+  cd $AI_SDLC_ROOT/projects/<project-name> && \
   mkdir -p .claude/commands .claude/skills docs/product/user-stories docs/architecture/adr docs/legal src tests && \
   git init && \
   git submodule add <ai-sdlc-repo-url> ai-sdlc
 ```
 
-**Important**: Each Bash tool invocation starts from the ai-sdlc root directory. All directory operations must be chained with `&&` in a single command to maintain context. The initial `mkdir -p` MUST be chained with the subsequent `cd` to avoid directory context loss.
-
 ### 4. Checkout ai-sdlc Version
 
 ```bash
-# Checkout specific version (use absolute path from ai-sdlc root)
-cd ./projects/<project-name>/ai-sdlc && \
+# Checkout specific version
+cd $AI_SDLC_ROOT/projects/<project-name>/ai-sdlc && \
   git checkout <version>
 ```
 
@@ -72,7 +78,7 @@ Replace placeholders:
 ### 6. Create Placeholder Files
 
 ```bash
-cd ./projects/<project-name> && \
+cd $AI_SDLC_ROOT/projects/<project-name> && \
   touch .claude/commands/.gitkeep \
         .claude/skills/.gitkeep \
         docs/product/user-stories/.gitkeep \
@@ -85,7 +91,7 @@ cd ./projects/<project-name> && \
 ### 7. Initial Commit
 
 ```bash
-cd ./projects/<project-name> && \
+cd $AI_SDLC_ROOT/projects/<project-name> && \
   git add . && \
   git commit -m "chore: initialize project with ai-sdlc framework"
 ```
@@ -95,11 +101,11 @@ cd ./projects/<project-name> && \
 If user chose to create GitHub repo:
 
 ```bash
-cd ./projects/<project-name> && \
+cd $AI_SDLC_ROOT/projects/<project-name> && \
   gh repo create <project-name> --<public|private> --source=. --push
 
 # After creation, update README.md with actual repo URL
-cd ./projects/<project-name> && \
+cd $AI_SDLC_ROOT/projects/<project-name> && \
   # Replace {{REPO_URL}} or "TBD" with https://github.com/<user>/<project-name>.git
   # Then commit and push the update
   git add README.md && \
