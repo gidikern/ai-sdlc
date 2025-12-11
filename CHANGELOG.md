@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (none yet)
 
 ### Fixed
+- (none yet)
+
+## [v1.2.1] - 2025-12-11
+
+### Fixed
 - Directory context loss in `/init-project` command by consolidating mkdir and cd into chained commands
 - Directory context loss in `/release` command when updating sibling projects
 
