@@ -30,28 +30,28 @@ ai-sdlc repo URL: <from git remote get-url origin>
 ai-sdlc version: <latest tag or user-specified>
 ```
 
-### 3. Create Project Structure
+### 3. Create Project Structure and Initialize Git
+
+Use chained commands to create the structure and initialize git in one invocation:
 
 ```bash
-mkdir -p ./projects/<project-name>/{.claude/commands,.claude/skills,docs/product/user-stories,docs/architecture/adr,docs/legal,src,tests}
-```
-
-### 4. Initialize Git and Add Submodule
-
-Use chained commands with `&&` to ensure each step succeeds before proceeding:
-
-```bash
-# Initialize git and add submodule
-cd ./projects/<project-name> && \
+# Create base directory and subdirectories, then initialize git
+mkdir -p ./projects/<project-name> && \
+  cd ./projects/<project-name> && \
+  mkdir -p .claude/commands .claude/skills docs/product/user-stories docs/architecture/adr docs/legal src tests && \
   git init && \
   git submodule add <ai-sdlc-repo-url> ai-sdlc
+```
 
-# Checkout specific version
+**Important**: Each Bash tool invocation starts from the ai-sdlc root directory. All directory operations must be chained with `&&` in a single command to maintain context. The initial `mkdir -p` MUST be chained with the subsequent `cd` to avoid directory context loss.
+
+### 4. Checkout ai-sdlc Version
+
+```bash
+# Checkout specific version (use absolute path from ai-sdlc root)
 cd ./projects/<project-name>/ai-sdlc && \
   git checkout <version>
 ```
-
-**Important**: Each Bash tool invocation starts from the ai-sdlc root directory. Use `cd` with full path and chain commands with `&&` to maintain context.
 
 ### 5. Create Files from Templates
 

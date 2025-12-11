@@ -1,6 +1,7 @@
 {
   "description": "Projects managed by ai-sdlc. Used by /release to auto-update submodules.",
   "projects": [
-    { "path": "./projects/haas", "autoUpdate": true }
+    { "path": "./projects/haas", "autoUpdate": true },
+    { "path": "./projects/health-coach", "autoUpdate": true }
   ]
 }
