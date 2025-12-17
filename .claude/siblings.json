@@ -1,5 +1,5 @@
 {
-  "description": "Projects managed by ai-sdlc. Used by /release to check for missing skills and sync settings.json.",
+  "description": "Projects managed by ai-sdlc. Used by /release to sync skills, commands, and workflows.",
   "projects": [
     { "path": "./projects/haas", "autoUpdate": true },
     { "path": "./projects/health-coach", "autoUpdate": true }

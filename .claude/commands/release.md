@@ -61,7 +61,7 @@ git push origin main
 git push origin <version>
 ```
 
-### 4. Sync Skills to Registered Projects
+### 4. Sync Skills, Commands, and Workflows to Registered Projects
 
 Read `.claude/siblings.json` and for each project with `autoUpdate: true`:
 
@@ -72,38 +72,60 @@ First, get the ai-sdlc root directory:
 AI_SDLC_ROOT=$(pwd)
 ```
 
-Then, for each project:
+Then, for each project, check THREE things:
 
-#### a) Read and Compare Settings
+#### a) Check Skills (Settings.json)
 
 1. Read parent `.claude/settings.json` to get all available skills
 2. Read project's `.claude/settings.json` to get current skills
 3. Compare and identify missing skills (cumulative, not just new ones)
 
-#### b) Ask User for Each Project with Missing Skills
+#### b) Check Workflow Commands
 
-If missing skills found:
+1. List workflow commands in parent `.claude/commands/`:
+   - `cross-functional-discovery.md`
+   - (Exclude framework commands: init-project, release, new-skill, validate-skill, prepare-release)
+2. List workflow commands in project `.claude/commands/`
+3. Compare and identify missing or updated commands
+
+#### c) Check Workflow Files
+
+1. List workflows in parent `workflows/*.md`
+2. List workflows in project `.claude/workflows/*.md`
+3. Compare and identify missing or updated workflows
+
+#### d) Ask User for Each Project with Missing Items
+
+If any missing/updated items found:
 ```markdown
 ## Project: <project-name>
 
-Missing skills:
+**Missing skills:**
 - facilitator
 - ux-researcher
-- data-analyst
 
-Add these skills to project settings.json? (yes/no)
+**Missing/updated commands:**
+- cross-functional-discovery.md (updated)
+
+**Missing/updated workflows:**
+- cross-functional-discovery.md (new)
+- discovery-to-architecture.md (updated)
+
+Sync these to project? (yes/no)
 ```
 
-#### c) Update Settings if Approved
+#### e) Update Project if Approved
 
 If user says yes:
-1. Add missing skill paths to project's settings.json
-2. Commit the change:
+1. Add missing skill paths to project's `.claude/settings.json`
+2. Copy missing/updated commands to project's `.claude/commands/`
+3. Copy missing/updated workflows to project's `.claude/workflows/`
+4. Commit the changes:
 
 ```bash
 cd $AI_SDLC_ROOT/<project-path> && \
-  git add .claude/settings.json && \
-  git commit -m "chore: sync skills from ai-sdlc <version>" && \
+  git add .claude/ && \
+  git commit -m "chore: sync skills, commands, and workflows from ai-sdlc <version>" && \
   git push
 ```
 
@@ -111,9 +133,9 @@ Display progress:
 ```markdown
 ## Syncing Projects
 
-| Project | Missing Skills | Status |
-|---------|----------------|--------|
-| projects/haas | facilitator, ux-researcher | ✅ Updated |
+| Project | Updates | Status |
+|---------|---------|--------|
+| projects/haas | 2 skills, 1 command, 1 workflow | ✅ Synced |
 | projects/health-coach | (none) | ✅ Already in sync |
 | projects/experimental | - | ⏭️ Skipped (autoUpdate: false) |
 ```
@@ -127,7 +149,7 @@ Display progress:
 - Tag `<version>` created and pushed
 
 ### Projects Synced
-- projects/haas → Added 2 skills
+- projects/haas → Added 2 skills, 1 command, 1 workflow
 - projects/health-coach → Already in sync
 
 ### Projects Skipped
@@ -135,7 +157,7 @@ Display progress:
 
 ### Next Steps
 - Announce release to team (if applicable)
-- Projects will inherit new skills on next Claude session
+- Projects now have latest skills, commands, and workflows
 ```
 
 ## Version Guidelines
@@ -152,7 +174,7 @@ Located at `.claude/siblings.json`:
 
 ```json
 {
-  "description": "Projects managed by ai-sdlc. Used by /release to sync skills.",
+  "description": "Projects managed by ai-sdlc. Used by /release to sync skills, commands, and workflows.",
   "projects": [
     { "path": "./projects/my-startup", "autoUpdate": true },
     { "path": "./projects/experimental", "autoUpdate": false }
@@ -161,11 +183,13 @@ Located at `.claude/siblings.json`:
 ```
 
 - `path`: Relative path from ai-sdlc root to the project
-- `autoUpdate`: If `true`, `/release` will check for missing skills and ask to sync
+- `autoUpdate`: If `true`, `/release` will check for missing/updated items and ask to sync
 
 ## Notes
 
-- Skills sync is cumulative: checks for ALL missing skills, not just newly added ones
+- Sync is cumulative: checks for ALL missing items, not just newly added ones
+- Syncs three things: skills (settings.json), workflow commands (.claude/commands), and workflows (.claude/workflows)
+- Only workflow commands are synced; framework commands (init-project, release, etc.) stay in parent
 - User approval required for each project
 - If user declines, they'll be asked again in the next release
 - Projects can evolve at their own pace

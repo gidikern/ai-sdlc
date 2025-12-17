@@ -35,17 +35,20 @@ All projects live under `projects/` (gitignored). Each project:
 # Registers in siblings.json for skill sync
 ```
 
-### Syncing Skills to Projects
+### Syncing to Projects
 
-After adding new skills:
+After adding new skills, commands, or workflows:
 1. Commit and push to GitHub
 2. Run `/release v1.x.x` to tag the release
-3. `/release` will check each project for missing skills and ask to sync
-4. Projects inherit changes immediately (no submodule update needed)
+3. `/release` will check each project for missing/updated items and ask to sync:
+   - Skills (updates `.claude/settings.json`)
+   - Workflow commands (copies to `.claude/commands/`)
+   - Workflows (copies to `.claude/workflows/`)
+4. Framework commands (`/init-project`, `/release`, etc.) stay in parent only
 
 ### siblings.json
 
-Controls which projects get checked for skill sync on release:
+Controls which projects get checked for sync on release:
 
 ```json
 {
@@ -56,9 +59,9 @@ Controls which projects get checked for skill sync on release:
 }
 ```
 
-- `autoUpdate: true` = Check for missing skills during `/release` and ask to sync
+- `autoUpdate: true` = Check for missing items during `/release` and ask to sync
 - `autoUpdate: false` = Skip this project during release
-- Sync is cumulative: checks for ALL missing skills, not just new ones
+- Sync is cumulative: checks for ALL missing items, not just new ones
 
 ## Development Guidelines
 

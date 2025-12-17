@@ -34,6 +34,7 @@ Determine project location: `$AI_SDLC_ROOT/projects/<project-name>/`
 
 ```bash
 mkdir -p $AI_SDLC_ROOT/projects/<project-name>/.claude/commands \
+         $AI_SDLC_ROOT/projects/<project-name>/.claude/workflows \
          $AI_SDLC_ROOT/projects/<project-name>/.claude/skills \
          $AI_SDLC_ROOT/projects/<project-name>/docs/product/user-stories \
          $AI_SDLC_ROOT/projects/<project-name>/docs/architecture/adr \
@@ -55,11 +56,30 @@ Replace placeholders:
 - `{{DOMAIN_CONTEXT}}` → "To be defined during Discovery"
 - `{{TECHNICAL_CONSTRAINTS}}` → "To be defined during Architecture"
 
-### 5. Create Placeholder Files
+### 5. Copy Workflow Commands and Workflows
+
+**Workflow commands** (NOT framework management commands like /init-project, /release, etc.):
 
 ```bash
-touch $AI_SDLC_ROOT/projects/<project-name>/.claude/commands/.gitkeep \
-      $AI_SDLC_ROOT/projects/<project-name>/.claude/skills/.gitkeep \
+# Copy workflow commands to project
+cp $AI_SDLC_ROOT/.claude/commands/cross-functional-discovery.md \
+   $AI_SDLC_ROOT/projects/<project-name>/.claude/commands/
+```
+
+**Workflow files:**
+
+```bash
+# Copy all workflows to project
+cp $AI_SDLC_ROOT/workflows/*.md \
+   $AI_SDLC_ROOT/projects/<project-name>/.claude/workflows/
+```
+
+**Note**: Only workflow commands are copied to projects. Framework management commands (`/init-project`, `/release`, `/new-skill`, `/validate-skill`, `/prepare-release`) remain in the parent directory only.
+
+### 6. Create Placeholder Files
+
+```bash
+touch $AI_SDLC_ROOT/projects/<project-name>/.claude/skills/.gitkeep \
       $AI_SDLC_ROOT/projects/<project-name>/docs/product/user-stories/.gitkeep \
       $AI_SDLC_ROOT/projects/<project-name>/docs/architecture/adr/.gitkeep \
       $AI_SDLC_ROOT/projects/<project-name>/docs/legal/.gitkeep \
@@ -67,7 +87,7 @@ touch $AI_SDLC_ROOT/projects/<project-name>/.claude/commands/.gitkeep \
       $AI_SDLC_ROOT/projects/<project-name>/tests/.gitkeep
 ```
 
-### 6. Initialize Git and Create GitHub Repository
+### 7. Initialize Git and Create GitHub Repository
 
 ```bash
 cd $AI_SDLC_ROOT/projects/<project-name> && \
@@ -77,7 +97,7 @@ cd $AI_SDLC_ROOT/projects/<project-name> && \
   gh repo create <project-name> --<public|private> --source=. --push
 ```
 
-### 7. Register in siblings.json
+### 8. Register in siblings.json
 
 Add the new project to `.claude/siblings.json`:
 
@@ -90,9 +110,9 @@ Add the new project to `.claude/siblings.json`:
 }
 ```
 
-**Note**: `autoUpdate: true` means `/release` will check for missing skills and ask to update this project's settings.json.
+**Note**: `autoUpdate: true` means `/release` will check for missing skills, commands, and workflows, and ask to sync them.
 
-### 8. Output Summary
+### 9. Output Summary
 
 ```markdown
 ## Project Created: <project-name>
@@ -107,7 +127,8 @@ Add the new project to `.claude/siblings.json`:
 projects/<project-name>/
 ├── .claude/
 │   ├── settings.json    ← References ../../skills/
-│   ├── commands/
+│   ├── commands/        ← Workflow commands (synced from parent)
+│   ├── workflows/       ← Workflow files (synced from parent)
 │   └── skills/          ← Local overrides
 ├── docs/
 │   ├── product/
@@ -135,7 +156,9 @@ projects/<project-name>/
 - All projects are created under `./projects/` directory
 - Projects are gitignored from ai-sdlc repo
 - Each project has its own git repo and GitHub remote (always created)
-- Projects inherit skills/workflows from parent via relative paths (`../../skills/`)
+- Projects inherit skills from parent via relative paths (`../../skills/`)
+- Workflow commands and workflows are copied to `.claude/commands/` and `.claude/workflows/`
 - Local skill overrides go in `.claude/skills/`
-- Projects are registered in siblings.json for automatic skill sync during releases
+- Projects are registered in siblings.json for automatic sync during releases
+- `/release` syncs skills, workflow commands, and workflows to registered projects
 - Requires `gh` CLI installed and authenticated (`gh auth login`)

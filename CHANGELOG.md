@@ -26,7 +26,14 @@ For existing projects using submodules:
 4. Commit changes
 
 ### Added
-- (none yet)
+- **Workflow command and workflow file sync to projects**
+  - `/init-project` now copies workflow commands (e.g., `/cross-functional-discovery`) to `.claude/commands/`
+  - `/init-project` now copies workflow files from `workflows/` to `.claude/workflows/`
+  - Framework management commands (`/init-project`, `/release`, `/new-skill`, etc.) remain parent-only
+  - `/release` now syncs three things: skills, workflow commands, and workflows
+  - Sync is cumulative across all three categories
+  - Projects get `.claude/workflows/` directory for workflow reference files
+  - All Claude-related files now organized under `.claude/` directory
 
 ### Fixed
 - (none yet)
