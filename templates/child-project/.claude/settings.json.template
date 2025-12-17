@@ -1,10 +1,14 @@
 {
   "skills": [
-    { "path": "./ai-sdlc/skills/product-manager" },
-    { "path": "./ai-sdlc/skills/architect" },
-    { "path": "./ai-sdlc/skills/developer" },
-    { "path": "./ai-sdlc/skills/reviewer" },
-    { "path": "./ai-sdlc/skills/legal-consultant" },
+    { "path": "../../skills/product-manager" },
+    { "path": "../../skills/architect" },
+    { "path": "../../skills/developer" },
+    { "path": "../../skills/reviewer" },
+    { "path": "../../skills/legal-consultant" },
+    { "path": "../../skills/facilitator" },
+    { "path": "../../skills/ux-researcher" },
+    { "path": "../../skills/growth-strategist" },
+    { "path": "../../skills/data-analyst" },
     { "path": "./.claude/skills", "_comment": "Local overrides - same name replaces base" }
   ],
   "commands": {

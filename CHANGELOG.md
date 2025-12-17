@@ -7,11 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- (none yet)
-
 ### Changed
-- (none yet)
+- **BREAKING: Simplified architecture - removed git submodule complexity**
+  - Projects now inherit skills via relative paths (`../../skills/`) instead of submodules
+  - Removed `/update-sub-sdlc` command (no longer needed)
+  - Updated `/init-project` to create simple directory structure without submodules
+  - Updated `/release` to sync project settings.json instead of updating submodules
+  - Release sync is now cumulative: checks for ALL missing skills, not just new ones
+  - Updated siblings.json purpose: now tracks projects for skill sync, not submodule updates
+  - Existing projects (haas, health-coach) migrated from submodule to parent/child structure
+  - All documentation updated to reflect simplified architecture
+
+### Migration Guide
+For existing projects using submodules:
+1. Remove submodule: `git submodule deinit -f ai-sdlc && git rm -f ai-sdlc`
+2. Update `.claude/settings.json`: Change paths from `./ai-sdlc/skills/` to `../../skills/`
+3. Update project `CLAUDE.md` to remove submodule references
+4. Commit changes
+
+### Added
+- **Workflow command and workflow file sync to projects**
+  - `/init-project` now copies workflow commands (e.g., `/cross-functional-discovery`) to `.claude/commands/`
+  - `/init-project` now copies workflow files from `workflows/` to `.claude/workflows/`
+  - Framework management commands (`/init-project`, `/release`, `/new-skill`, etc.) remain parent-only
+  - `/release` now syncs three things: skills, workflow commands, and workflows
+  - Sync is cumulative across all three categories
+  - Projects get `.claude/workflows/` directory for workflow reference files
+  - All Claude-related files now organized under `.claude/` directory
 
 ### Fixed
 - (none yet)
