@@ -1,6 +1,6 @@
 # /release
 
-Create a new versioned release of ai-sdlc and optionally update all registered projects.
+Create a new versioned release of ai-sdlc and optionally sync skills to registered projects.
 
 ## Usage
 ```
@@ -61,55 +61,61 @@ git push origin main
 git push origin <version>
 ```
 
-### 4. Update Registered Projects
+### 4. Sync Skills to Registered Projects
 
 Read `.claude/siblings.json` and for each project with `autoUpdate: true`:
 
-**CRITICAL**: The Bash tool's working directory persists between invocations. To avoid directory context issues, use a single chained command per project that navigates to the absolute path.
+**CRITICAL**: The Bash tool's working directory persists between invocations. Use absolute paths with `$AI_SDLC_ROOT`.
 
 First, get the ai-sdlc root directory:
 ```bash
 AI_SDLC_ROOT=$(pwd)
 ```
 
-Then for each project, use this single-command pattern:
-```bash
-# Update submodule and commit in one chained command
-cd $AI_SDLC_ROOT/<project-path>/ai-sdlc && \
-  git fetch --tags origin && \
-  git checkout <version> && \
-  cd .. && \
-  git add ai-sdlc && \
-  git commit -m "chore: update ai-sdlc to <version>" && \
-  git push
+Then, for each project:
+
+#### a) Read and Compare Settings
+
+1. Read parent `.claude/settings.json` to get all available skills
+2. Read project's `.claude/settings.json` to get current skills
+3. Compare and identify missing skills (cumulative, not just new ones)
+
+#### b) Ask User for Each Project with Missing Skills
+
+If missing skills found:
+```markdown
+## Project: <project-name>
+
+Missing skills:
+- facilitator
+- ux-researcher
+- data-analyst
+
+Add these skills to project settings.json? (yes/no)
 ```
 
-Example for `./projects/haas`:
+#### c) Update Settings if Approved
+
+If user says yes:
+1. Add missing skill paths to project's settings.json
+2. Commit the change:
+
 ```bash
-cd $AI_SDLC_ROOT/projects/haas/ai-sdlc && \
-  git fetch --tags origin && \
-  git checkout v1.2.1 && \
-  cd .. && \
-  git add ai-sdlc && \
-  git commit -m "chore: update ai-sdlc to v1.2.1" && \
+cd $AI_SDLC_ROOT/<project-path> && \
+  git add .claude/settings.json && \
+  git commit -m "chore: sync skills from ai-sdlc <version>" && \
   git push
 ```
-
-**Why this pattern**:
-- Single chained command ensures all steps happen in correct context
-- Using `$AI_SDLC_ROOT` makes it work from any starting directory
-- `cd ..` after updating submodule returns to project root for commit
-- No reliance on Bash tool returning to a specific directory
 
 Display progress:
 ```markdown
-## Updating Projects
+## Syncing Projects
 
-| Project | Status |
-|---------|--------|
-| projects/my-startup | ✅ Updated to <version> |
-| projects/another-project | ✅ Updated to <version> |
-| projects/experimental | ⏭️ Skipped (autoUpdate: false) |
+| Project | Missing Skills | Status |
+|---------|----------------|--------|
+| projects/haas | facilitator, ux-researcher | ✅ Updated |
+| projects/health-coach | (none) | ✅ Already in sync |
+| projects/experimental | - | ⏭️ Skipped (autoUpdate: false) |
 ```
 
 ### 5. Post-Release Summary
@@ -120,20 +126,16 @@ Display progress:
 ### ai-sdlc
 - Tag `<version>` created and pushed
 
-### Projects Updated
-- projects/my-startup → <version>
-- projects/another-project → <version>
+### Projects Synced
+- projects/haas → Added 2 skills
+- projects/health-coach → Already in sync
 
 ### Projects Skipped
 - projects/experimental (autoUpdate: false)
 
 ### Next Steps
-- Push project changes to their remotes if desired:
-  \`\`\`bash
-  cd projects/my-startup && git push
-  cd projects/another-project && git push
-  \`\`\`
 - Announce release to team (if applicable)
+- Projects will inherit new skills on next Claude session
 ```
 
 ## Version Guidelines
@@ -150,7 +152,7 @@ Located at `.claude/siblings.json`:
 
 ```json
 {
-  "description": "Projects managed by ai-sdlc. Used by /release to auto-update submodules.",
+  "description": "Projects managed by ai-sdlc. Used by /release to sync skills.",
   "projects": [
     { "path": "./projects/my-startup", "autoUpdate": true },
     { "path": "./projects/experimental", "autoUpdate": false }
@@ -159,4 +161,11 @@ Located at `.claude/siblings.json`:
 ```
 
 - `path`: Relative path from ai-sdlc root to the project
-- `autoUpdate`: If `true`, `/release` will update this project's submodule
+- `autoUpdate`: If `true`, `/release` will check for missing skills and ask to sync
+
+## Notes
+
+- Skills sync is cumulative: checks for ALL missing skills, not just newly added ones
+- User approval required for each project
+- If user declines, they'll be asked again in the next release
+- Projects can evolve at their own pace

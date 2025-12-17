@@ -4,7 +4,7 @@ This project IS the AI-native Software Development Lifecycle framework. These in
 
 ## Project Purpose
 
-Provide reusable AI agent skills, workflows, and commands that other projects inherit via git submodule.
+Provide reusable AI agent skills, workflows, and commands that other projects inherit via relative paths.
 
 ## Architecture
 
@@ -12,10 +12,10 @@ Provide reusable AI agent skills, workflows, and commands that other projects in
 ai-sdlc/
 ├── skills/           # Agent definitions (Product Manager, Architect, etc.)
 ├── workflows/        # Multi-phase processes
-├── projects/         # Local projects (gitignored) - each has ai-sdlc as submodule
+├── projects/         # Child projects (gitignored) - inherit via ../../skills/
 ├── .claude/
 │   ├── settings.json
-│   ├── siblings.json # Tracks projects for auto-update on release
+│   ├── siblings.json # Tracks projects for skill sync on release
 │   └── commands/     # CLI commands for skill development
 └── templates/        # Scaffolding for child projects
 ```
@@ -25,26 +25,27 @@ ai-sdlc/
 ### Creating Projects
 
 All projects live under `projects/` (gitignored). Each project:
-- Has its own git repo
-- Uses ai-sdlc as a submodule (from GitHub)
+- Has its own git repo and GitHub remote
+- Inherits skills/workflows from parent via relative paths (`../../skills/`)
 - Is registered in `.claude/siblings.json`
 
 ```bash
 /init-project my-startup
-# Creates: projects/my-startup/ with ai-sdlc submodule
-# Registers in siblings.json
+# Creates: projects/my-startup/ with structure and GitHub repo
+# Registers in siblings.json for skill sync
 ```
 
-### Syncing Changes to Projects
+### Syncing Skills to Projects
 
-After making skill changes:
+After adding new skills:
 1. Commit and push to GitHub
-2. Run `/release v1.x.x` to tag and auto-update all projects
-3. Or manually in each project: `/update-sub-sdlc`
+2. Run `/release v1.x.x` to tag the release
+3. `/release` will check each project for missing skills and ask to sync
+4. Projects inherit changes immediately (no submodule update needed)
 
 ### siblings.json
 
-Controls which projects get auto-updated on release:
+Controls which projects get checked for skill sync on release:
 
 ```json
 {
@@ -54,6 +55,10 @@ Controls which projects get auto-updated on release:
   ]
 }
 ```
+
+- `autoUpdate: true` = Check for missing skills during `/release` and ask to sync
+- `autoUpdate: false` = Skip this project during release
+- Sync is cumulative: checks for ALL missing skills, not just new ones
 
 ## Development Guidelines
 
@@ -133,9 +138,8 @@ Before committing skill changes:
 | `/new-skill <name>` | Scaffold a new skill |
 | `/validate-skill <path>` | Check skill structure and quality |
 | `/prepare-release` | Review commits and update CHANGELOG [Unreleased] |
-| `/release <version>` | Create release and update all projects |
+| `/release <version>` | Create release and sync skills to projects |
 | `/init-project <name>` | Create new project under projects/ |
-| `/update-sub-sdlc [version]` | Update ai-sdlc submodule in current project |
 
 ## Documentation Responsibilities
 

@@ -7,10 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- (none yet)
-
 ### Changed
+- **BREAKING: Simplified architecture - removed git submodule complexity**
+  - Projects now inherit skills via relative paths (`../../skills/`) instead of submodules
+  - Removed `/update-sub-sdlc` command (no longer needed)
+  - Updated `/init-project` to create simple directory structure without submodules
+  - Updated `/release` to sync project settings.json instead of updating submodules
+  - Release sync is now cumulative: checks for ALL missing skills, not just new ones
+  - Updated siblings.json purpose: now tracks projects for skill sync, not submodule updates
+  - Existing projects (haas, health-coach) migrated from submodule to parent/child structure
+  - All documentation updated to reflect simplified architecture
+
+### Migration Guide
+For existing projects using submodules:
+1. Remove submodule: `git submodule deinit -f ai-sdlc && git rm -f ai-sdlc`
+2. Update `.claude/settings.json`: Change paths from `./ai-sdlc/skills/` to `../../skills/`
+3. Update project `CLAUDE.md` to remove submodule references
+4. Commit changes
+
+### Added
 - (none yet)
 
 ### Fixed
