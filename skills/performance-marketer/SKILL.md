@@ -71,11 +71,11 @@ Balance with other specialists:
 
 | Artifact | File | Purpose |
 |----------|------|---------|
-| Growth Experiment Roadmap | `docs/product/growth-experiments.md` | Prioritized list of tests to run |
-| Acquisition Funnel Analysis | `docs/product/acquisition-funnel.md` | Conversion metrics and optimization opportunities |
-| CAC/LTV Model | `docs/product/unit-economics.md` | Financial viability of growth channels |
-| Paid Marketing Strategy | `docs/product/paid-marketing-strategy.md` | Channel strategy, budget allocation, creative testing |
-| Metrics Dashboard Spec | `docs/product/metrics-dashboard.md` | What to measure and how |
+| Growth Experiment Roadmap | `docs/marketing/growth-experiments.md` | Prioritized list of tests to run |
+| Acquisition Funnel Analysis | `docs/marketing/acquisition-funnel.md` | Conversion metrics and optimization opportunities |
+| CAC/LTV Model | `docs/marketing/unit-economics.md` | Financial viability of growth channels |
+| Paid Marketing Strategy | `docs/marketing/paid-marketing-strategy.md` | Channel strategy, budget allocation, creative testing |
+| Metrics Dashboard Spec | `docs/marketing/metrics-dashboard.md` | What to measure and how |
 
 ## Handoff
 
