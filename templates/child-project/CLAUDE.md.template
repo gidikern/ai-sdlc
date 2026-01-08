@@ -7,7 +7,7 @@
 ## AI-SDLC Integration
 
 This project lives under the ai-sdlc parent directory and inherits:
-- 9 specialist agent skills via relative paths (`../../skills/`)
+- 10 specialist agent skills via relative paths (`../../skills/`)
 - Workflow commands and files (synced from parent)
 - Development standards and best practices
 
@@ -24,6 +24,7 @@ This project lives under the ai-sdlc parent directory and inherits:
 | ux-researcher | ai-sdlc | ✅ Using base |
 | growth-strategist | ai-sdlc | ✅ Using base |
 | data-analyst | ai-sdlc | ✅ Using base |
+| performance-marketer | ai-sdlc | ✅ Using base |
 
 ### Local Overrides
 

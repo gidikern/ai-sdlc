@@ -8,7 +8,8 @@
     { "path": "./skills/facilitator" },
     { "path": "./skills/ux-researcher" },
     { "path": "./skills/growth-strategist" },
-    { "path": "./skills/data-analyst" }
+    { "path": "./skills/data-analyst" },
+    { "path": "./skills/performance-marketer" }
   ],
   "commands": {
     "path": "./.claude/commands"

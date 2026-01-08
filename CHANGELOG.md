@@ -26,6 +26,12 @@ For existing projects using submodules:
 4. Commit changes
 
 ### Added
+- **Performance Marketer skill** for growth-first tactical marketing
+  - Data-driven growth optimization and rapid experimentation
+  - Balances "ship fast and measure" with product quality
+  - Active during discovery, prioritization, and metrics discussions
+  - Works hand-in-hand with Product Manager (productive tension)
+  - Outputs: growth experiments, funnel analysis, CAC/LTV models
 - **Workflow command and workflow file sync to projects**
   - `/init-project` now copies workflow commands (e.g., `/cross-functional-discovery`) to `.claude/commands/`
   - `/init-project` now copies workflow files from `workflows/` to `.claude/workflows/`

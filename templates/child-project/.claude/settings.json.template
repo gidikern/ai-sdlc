@@ -9,6 +9,7 @@
     { "path": "../../skills/ux-researcher" },
     { "path": "../../skills/growth-strategist" },
     { "path": "../../skills/data-analyst" },
+    { "path": "../../skills/performance-marketer" },
     { "path": "./.claude/skills", "_comment": "Local overrides - same name replaces base" }
   ],
   "commands": {

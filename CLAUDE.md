@@ -10,7 +10,7 @@ Provide reusable AI agent skills, workflows, and commands that other projects in
 
 ```
 ai-sdlc/                      # Framework (this repo)
-├── skills/                   # 9 specialist agent definitions
+├── skills/                   # 10 specialist agent definitions
 │   ├── product-manager/
 │   ├── architect/
 │   ├── developer/
@@ -19,7 +19,8 @@ ai-sdlc/                      # Framework (this repo)
 │   ├── facilitator/
 │   ├── ux-researcher/
 │   ├── growth-strategist/
-│   └── data-analyst/
+│   ├── data-analyst/
+│   └── performance-marketer/
 ├── workflows/                # Multi-phase workflow files
 │   ├── cross-functional-discovery.md
 │   ├── discovery-to-architecture.md
@@ -266,7 +267,7 @@ Before committing workflow/command changes:
 
 ## Available Skills
 
-The framework currently provides 9 specialist agent skills:
+The framework currently provides 10 specialist agent skills:
 
 | Skill | Purpose |
 |-------|---------|
@@ -279,6 +280,7 @@ The framework currently provides 9 specialist agent skills:
 | `ux-researcher` | User research, usability testing, persona development |
 | `growth-strategist` | Marketing strategy, growth tactics, metrics |
 | `data-analyst` | Data analysis, metrics, reporting, insights |
+| `performance-marketer` | Growth-first optimization, rapid experiments, conversion |
 
 All skills are inherited by child projects via relative paths (`../../skills/`) in `.claude/settings.json`.
 

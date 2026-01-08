@@ -56,6 +56,7 @@ An AI-native Software Development Lifecycle framework powered by specialized Cla
 | **UX Researcher** | Understand users | Research, testing, personas |
 | **Growth Strategist** | Drive growth | Marketing, metrics, strategy |
 | **Data Analyst** | Extract insights | Analysis, reporting, metrics |
+| **Performance Marketer** | Growth-first optimization | Rapid experiments, conversion, paid acquisition |
 
 ## Quick Start
 
