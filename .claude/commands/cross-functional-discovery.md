@@ -27,7 +27,7 @@ Where `<brief>` can be:
 You are the **Facilitator agent** initiating a cross-functional discovery session.
 
 ### Workflow Reference
-Follow the process defined in `workflows/cross-functional-discovery.md`:
+Follow the process defined in `.claude/workflows/cross-functional-discovery.md`:
 - Phase A: Parallel Analysis
 - Phase B: Debate & Resolution (if tensions exist)
 - Phase C: Artifact Generation (only after user approval)
@@ -39,22 +39,52 @@ Follow the process defined in `workflows/cross-functional-discovery.md`:
 - If the input is text, use it as the brief directly
 
 **2. Phase A: Parallel Analysis**
-- Identify which specialists are relevant for this brief:
-  - **Always include**: Product Manager, Facilitator (you)
-  - **Include based on topic**:
-    - UX Researcher (if user experience is central)
-    - Architect (if technical feasibility matters)
-    - Legal Consultant (if compliance/regulatory concerns)
-    - Growth Strategist (if acquisition/monetization is key)
-    - Data Analyst (if measurement/experimentation needed)
-- Spawn specialist agents in parallel using the Task tool
-- Frame domain-specific questions for each specialist
-- Collect structured responses with:
-  - Key findings
-  - Concerns/risks
-  - Recommendations
-  - Questions for other specialists
-  - Confidence level
+
+Identify which specialists are relevant for this brief:
+- **Always include**: Product Manager, Facilitator (you)
+- **Include based on topic**:
+  - UX Researcher (if user experience is central)
+  - Architect (if technical feasibility matters)
+  - Legal Consultant (if compliance/regulatory concerns)
+  - Growth Strategist (if acquisition/monetization is key)
+  - Data Analyst (if measurement/experimentation needed)
+
+**How to get specialist perspectives:**
+
+Since skills in Claude Code are personas (not spawnable agents), use this approach:
+
+**Option A - Parallel using Task agents** (recommended when you need deep analysis):
+Spawn general-purpose Task agents and instruct them to adopt specific skill perspectives:
+
+```
+Use Task tool with subagent_type="general-purpose" to spawn parallel agents:
+
+Agent 1: "Read ../../skills/product-manager/SKILL.md and adopt that role.
+         Then analyze this brief from a Product Manager perspective: [brief]
+         Provide: key findings, concerns/risks, recommendations, questions for other specialists"
+
+Agent 2: "Read ../../skills/architect/SKILL.md and adopt that role.
+         Then analyze this brief from an Architect perspective: [brief]
+         Provide: key findings, concerns/risks, recommendations, questions for other specialists"
+
+[etc for each relevant specialist]
+```
+
+Spawn all agents in a SINGLE message with multiple Task tool calls for true parallelism.
+
+**Option B - Sequential embodiment** (faster for simpler analyses):
+Work through each specialist perspective sequentially by reading their SKILL.md and embodying that role yourself:
+
+```
+1. Read ../../skills/product-manager/SKILL.md
+2. Embody that role and analyze the brief
+3. Document findings
+4. Read ../../skills/architect/SKILL.md
+5. Embody that role and analyze the brief
+6. [Continue for each specialist]
+```
+
+Choose Option A for complex briefs needing deep analysis, Option B for faster turnaround.
 
 **3. Phase B: Synthesis & Conflict Detection**
 - Compile all specialist inputs
@@ -69,7 +99,7 @@ Follow the process defined in `workflows/cross-functional-discovery.md`:
 **4. Phase B (continued): Facilitate Debates**
 - For Critical/High tensions:
   - Frame the tension clearly
-  - Route to relevant specialists for structured debate
+  - If needed, spawn Task agents to embody the relevant specialist perspectives for debate
   - Drive toward resolution or synthesis
   - If unresolved after 2 rounds → escalate to human
 - Document outcomes (resolved positions or escalation items)
@@ -82,29 +112,32 @@ Follow the process defined in `workflows/cross-functional-discovery.md`:
 - **STOP HERE and wait for user approval**
 
 **6. Phase C: Artifact Generation (Only After User Approval)**
-- Generate domain artifacts as appropriate:
-  - Discovery Synthesis: `docs/product/cross-functional-discovery.md`
-  - Personas: `docs/product/personas.md`
-  - Metrics Framework: `docs/product/metrics.md`
-  - Growth Strategy: `docs/product/growth-strategy.md`
-  - Technical Assessment: `docs/architecture/feasibility.md`
-  - Legal Risk Assessment: `docs/legal/risk-assessment.md`
-- Use Task tool to spawn specialist agents for artifact creation
+Generate domain artifacts as appropriate:
+- Discovery Synthesis: `docs/product/cross-functional-discovery.md`
+- Personas: `docs/product/personas.md`
+- Metrics Framework: `docs/product/metrics.md`
+- Growth Strategy: `docs/product/growth-strategy.md`
+- Technical Assessment: `docs/architecture/feasibility.md`
+- Legal Risk Assessment: `docs/legal/risk-assessment.md`
+
+Use Task tool with general-purpose agents instructed to read relevant skill files.
 
 ### Important Guidelines
 
 **DO**:
 - ✅ Use TodoWrite to track progress through phases
-- ✅ Spawn agents in parallel whenever possible
+- ✅ Choose appropriate approach (parallel vs sequential) based on complexity
+- ✅ Instruct Task agents to READ skill files (../../skills/[name]/SKILL.md)
 - ✅ Present clear synthesis before Phase C
 - ✅ Ask for user approval before generating artifacts
 - ✅ Escalate unresolved tensions to human with clear options
 
 **DON'T**:
+- ❌ Try to use skill names as subagent_type (use "general-purpose" instead)
+- ❌ Try to invoke skills with Skill() tool (not how skills work)
 - ❌ Auto-proceed to Phase C without user approval
 - ❌ Skip synthesis (always present findings first)
 - ❌ Let debates run more than 2 rounds (escalate if stuck)
-- ❌ Generate artifacts for specialists that weren't consulted
 
 ### Human Checkpoints
 
@@ -142,8 +175,9 @@ Ready to proceed to Phase C (Artifact Generation)?
 
 ### Tips for Success
 
-- **Parallel Execution**: Launch all Phase A specialists in a single message with multiple Task tool calls
+- **Parallel Execution**: When using Task agents, launch all Phase A specialists in a single message
+- **Explicit Skill Loading**: Always instruct agents to "Read [skill].md and adopt that role"
 - **Clear Framing**: When routing debates, frame tensions neutrally without bias
 - **Objective Criteria**: Use data and evidence to resolve tensions when possible
-- **Know When to Escalate**: Don't force consensus on strategic business decisions—present options to human
+- **Know When to Escalate**: Don't force consensus on strategic decisions—present options
 - **Document Everything**: Keep clear decision log throughout the process

@@ -52,10 +52,14 @@ An AI-native Software Development Lifecycle framework powered by specialized Cla
 | **Architect** | Design how to build it | System design, tech decisions, APIs |
 | **Developer** | Implement the solution | Code, tests, documentation |
 | **Reviewer** | Ensure quality | Code review, security, standards |
+| **Facilitator** | Coordinate collaboration | Meetings, decision-making, alignment |
+| **UX Researcher** | Understand users | Research, testing, personas |
+| **Growth Strategist** | Drive growth | Marketing, metrics, strategy |
+| **Data Analyst** | Extract insights | Analysis, reporting, metrics |
 
 ## Quick Start
 
-### Option 1: Create Project via Command (Recommended)
+### Create a New Project
 
 From within the ai-sdlc directory:
 ```bash
@@ -63,23 +67,15 @@ claude
 > /init-project my-startup
 ```
 
-This creates `projects/my-startup/` with ai-sdlc as a submodule.
+This creates `projects/my-startup/` with:
+- Own git repo and GitHub remote
+- Skills inherited via relative paths (`../../skills/`)
+- Workflow commands and files synced from parent
+- Registered for automatic updates during `/release`
 
-### Option 2: Manual Setup
-
+Then start working:
 ```bash
-# Create your project
-mkdir my-project && cd my-project
-git init
-
-# Add ai-sdlc as submodule
-git submodule add https://github.com/YOUR_USERNAME/ai-sdlc.git
-
-# Copy template files
-cp ai-sdlc/templates/child-project/.claude/settings.json.template .claude/settings.json
-cp ai-sdlc/templates/child-project/CLAUDE.md.template CLAUDE.md
-
-# Start Claude Code
+cd projects/my-startup
 claude
 ```
 
@@ -110,75 +106,86 @@ claude
 ## Project Structure
 
 ```
-your-project/
-├── ai-sdlc/                # Submodule - don't edit directly
+ai-sdlc/                    # Framework (parent)
+├── skills/                 # 9 specialist agents
+├── workflows/              # Multi-phase workflows
 ├── .claude/
-│   ├── settings.json       # Points to ai-sdlc skills
-│   ├── commands/           # Project-specific commands
-│   └── skills/             # Local skill overrides
-├── docs/
-│   ├── product/
-│   │   ├── discovery.md    # Problem exploration
-│   │   ├── prd.md          # Product requirements
-│   │   └── user-stories/   # Detailed stories
-│   ├── architecture/
-│   │   ├── architecture.md # System design
-│   │   ├── tech-spec.md    # Technical details
-│   │   └── adr/            # Decision records
-│   ├── legal/
-│   │   ├── risk-assessment.md
-│   │   └── compliance-checklist.md
-│   └── reviews/            # Code review reports
-├── src/                    # Source code
-└── tests/                  # Test files
+│   ├── commands/           # Framework + workflow commands
+│   └── siblings.json       # Tracks child projects
+└── projects/               # Your projects (gitignored)
+    └── your-project/
+        ├── .claude/
+        │   ├── settings.json    # References ../../skills/
+        │   ├── commands/        # Workflow commands (synced)
+        │   ├── workflows/       # Workflow files (synced)
+        │   └── skills/          # Local skill overrides
+        ├── docs/
+        │   ├── product/
+        │   │   ├── discovery.md    # Problem exploration
+        │   │   ├── prd.md          # Product requirements
+        │   │   └── user-stories/   # Detailed stories
+        │   ├── architecture/
+        │   │   ├── architecture.md # System design
+        │   │   ├── tech-spec.md    # Technical details
+        │   │   └── adr/            # Decision records
+        │   ├── legal/
+        │   │   ├── risk-assessment.md
+        │   │   └── compliance-checklist.md
+        │   └── reviews/            # Code review reports
+        ├── src/                    # Source code
+        └── tests/                  # Test files
 ```
 
 ## Commands
 
-When working in ai-sdlc (framework development):
+### Framework Management (ai-sdlc directory only)
 
 | Command | Purpose |
 |---------|---------|
 | `/init-project <name>` | Create new project under projects/ |
+| `/release <version>` | Tag release and sync to child projects |
 | `/new-skill <name>` | Scaffold a new skill |
 | `/validate-skill <path>` | Check skill structure |
-| `/release <version>` | Create release, update all projects |
+| `/prepare-release` | Review commits and update CHANGELOG |
 
-When working in a child project:
+### Workflow Commands (available in all projects)
 
 | Command | Purpose |
 |---------|---------|
-| `/update-sub-sdlc` | Pull latest ai-sdlc changes |
-| `/update-sub-sdlc v1.2.0` | Checkout specific version |
+| `/cross-functional-discovery` | Multi-agent discovery process |
 
-## Updating ai-sdlc
+## Getting Updates
 
-In your project:
-```bash
-# Pull latest
-/update-sub-sdlc
+Child projects automatically receive updates when you run `/release` in the ai-sdlc directory:
+- New/updated skills added to `.claude/settings.json`
+- New/updated workflow commands synced to `.claude/commands/`
+- New/updated workflow files synced to `.claude/workflows/`
 
-# Or checkout specific version
-/update-sub-sdlc v1.2.0
-
-# Commit the update
-git add ai-sdlc
-git commit -m "chore: update ai-sdlc to v1.2.0"
-```
+The `/release` command asks for approval before updating each project.
 
 ## Overriding Skills
 
-To customize a skill for your project, create a local version:
+To customize a skill for your project, create a local version in `.claude/skills/`:
 
 ```bash
-# Create local skill directory
+# From your project directory (e.g., projects/my-startup/)
 mkdir -p .claude/skills/product-manager
 
-# Copy and modify
-cp ai-sdlc/skills/product-manager/SKILL.md .claude/skills/product-manager/
+# Copy from parent
+cp ../../skills/product-manager/SKILL.md .claude/skills/product-manager/
 
 # Edit to your needs
-# The local version completely replaces the base
+# The local version completely replaces the inherited one
+```
+
+Skills are inherited via relative paths in `.claude/settings.json`:
+```json
+{
+  "skills": [
+    { "path": "../../skills/product-manager" },
+    { "path": "./.claude/skills" }  // Local overrides
+  ]
+}
 ```
 
 ## License

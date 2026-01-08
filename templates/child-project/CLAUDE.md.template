@@ -7,9 +7,9 @@
 ## AI-SDLC Integration
 
 This project lives under the ai-sdlc parent directory and inherits:
-- Agent skills (Product Manager, Architect, Developer, Reviewer)
-- Workflows (Discovery → Architecture → Implementation)
-- Development standards
+- 9 specialist agent skills via relative paths (`../../skills/`)
+- Workflow commands and files (synced from parent)
+- Development standards and best practices
 
 ### Inherited Skills
 
@@ -19,6 +19,11 @@ This project lives under the ai-sdlc parent directory and inherits:
 | architect | ai-sdlc | ✅ Using base |
 | developer | ai-sdlc | ✅ Using base |
 | reviewer | ai-sdlc | ✅ Using base |
+| legal-consultant | ai-sdlc | ✅ Using base |
+| facilitator | ai-sdlc | ✅ Using base |
+| ux-researcher | ai-sdlc | ✅ Using base |
+| growth-strategist | ai-sdlc | ✅ Using base |
+| data-analyst | ai-sdlc | ✅ Using base |
 
 ### Local Overrides
 
@@ -69,17 +74,29 @@ See `docs/architecture/adr/` for Architecture Decision Records.
 {{PROJECT_NAME}}/
 ├── .claude/
 │   ├── settings.json     ← Skill configuration (references ../../skills/)
-│   ├── commands/         ← Project-specific commands
+│   ├── commands/         ← Workflow commands (synced from parent)
+│   ├── workflows/        ← Workflow files (synced from parent)
 │   └── skills/           ← Local skill overrides
 ├── docs/
 │   ├── product/          ← PRD, discovery, user stories
-│   └── architecture/     ← System design, ADRs
-└── src/                  ← Source code
+│   ├── architecture/     ← System design, ADRs
+│   └── legal/            ← Risk assessments, compliance
+├── src/                  ← Source code
+└── tests/                ← Test files
 ```
 
 ## Commands
 
-Project commands:
-- (Add project-specific commands in .claude/commands/)
+### Workflow Commands (Available in this project)
 
-Base commands from ai-sdlc are available from the parent directory.
+| Command | Purpose |
+|---------|---------|
+| `/cross-functional-discovery` | Multi-agent discovery process |
+
+### Framework Commands (Run from parent ai-sdlc directory)
+
+| Command | Purpose |
+|---------|---------|
+| `/release <version>` | Sync new skills/workflows to this project |
+
+Add project-specific commands in `.claude/commands/` as needed.
