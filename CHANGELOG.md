@@ -42,7 +42,13 @@ For existing projects using submodules:
   - All Claude-related files now organized under `.claude/` directory
 
 ### Fixed
-- (none yet)
+- Performance-marketer skill artifact paths corrected to use `docs/marketing/` folder
+
+### Documentation
+- Skills system clarification with guidance on using skills as personas via Task agents
+- Expanded framework documentation with detailed project management and workflow sections
+- Added AGENTS.md symlink for discoverability
+- Updated README.md and child project templates with all 10 specialist agents
 
 ## [v1.2.1] - 2025-12-11
 
