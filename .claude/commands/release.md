@@ -74,23 +74,23 @@ AI_SDLC_ROOT=$(pwd)
 
 Then, for each project, check THREE things:
 
+**`_` prefix convention**: any skill, command, or workflow prefixed with `_` is local-only and never synced to siblings.
+
 #### a) Check Skills (Settings.json)
 
-1. Read parent `.claude/settings.json` to get all available skills
+1. List skills in parent `.claude/skills/` — **exclude** any prefixed with `_`
 2. Read project's `.claude/settings.json` to get current skills
 3. Compare and identify missing skills (cumulative, not just new ones)
 
 #### b) Check Workflow Commands
 
-1. List workflow commands in parent `.claude/commands/`:
-   - `cross-functional-discovery.md`
-   - (Exclude framework commands: init-project, release, new-skill, validate-skill, prepare-release)
+1. List `.claude/commands/*.md` — **exclude** framework commands (`release.md`, `init-project.md`, `new-skill.md`, `validate-skill.md`, `prepare-release.md`) and files prefixed with `_`
 2. List workflow commands in project `.claude/commands/`
 3. Compare and identify missing or updated commands
 
 #### c) Check Workflow Files
 
-1. List workflows in parent `workflows/*.md`
+1. List workflows in parent `.claude/workflows/*.md` — **exclude** files prefixed with `_`
 2. List workflows in project `.claude/workflows/*.md`
 3. Compare and identify missing or updated workflows
 
@@ -188,8 +188,9 @@ Located at `.claude/siblings.json`:
 ## Notes
 
 - Sync is cumulative: checks for ALL missing items, not just newly added ones
-- Syncs three things: skills (settings.json), workflow commands (.claude/commands), and workflows (.claude/workflows)
+- Syncs three things: skills (.claude/settings.json), workflow commands (.claude/commands), and workflows (.claude/workflows)
 - Only workflow commands are synced; framework commands (init-project, release, etc.) stay in parent
+- Items prefixed with `_` are local-only and never synced to siblings
 - User approval required for each project
 - If user declines, they'll be asked again in the next release
 - Projects can evolve at their own pace

@@ -1,16 +1,16 @@
 {
   "skills": [
-    { "path": "../../skills/product-manager" },
-    { "path": "../../skills/architect" },
-    { "path": "../../skills/developer" },
-    { "path": "../../skills/reviewer" },
-    { "path": "../../skills/legal-consultant" },
-    { "path": "../../skills/facilitator" },
-    { "path": "../../skills/ux-researcher" },
-    { "path": "../../skills/growth-strategist" },
-    { "path": "../../skills/data-analyst" },
-    { "path": "../../skills/performance-marketer" },
-    { "path": "./.claude/skills", "_comment": "Local overrides - same name replaces base" }
+    { "path": "../../.claude/skills/product-manager" },
+    { "path": "../../.claude/skills/architect" },
+    { "path": "../../.claude/skills/developer" },
+    { "path": "../../.claude/skills/reviewer" },
+    { "path": "../../.claude/skills/legal-consultant" },
+    { "path": "../../.claude/skills/facilitator" },
+    { "path": "../../.claude/skills/ux-researcher" },
+    { "path": "../../.claude/skills/growth-strategist" },
+    { "path": "../../.claude/skills/data-analyst" },
+    { "path": "../../.claude/skills/performance-marketer" },
+    { "path": "./.claude/skills" }
   ],
   "commands": {
     "path": "./.claude/commands"

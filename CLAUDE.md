@@ -10,31 +10,31 @@ Provide reusable AI agent skills, workflows, and commands that other projects in
 
 ```
 ai-sdlc/                      # Framework (this repo)
-├── skills/                   # 10 specialist agent definitions
-│   ├── product-manager/
-│   ├── architect/
-│   ├── developer/
-│   ├── reviewer/
-│   ├── legal-consultant/
-│   ├── facilitator/
-│   ├── ux-researcher/
-│   ├── growth-strategist/
-│   ├── data-analyst/
-│   └── performance-marketer/
-├── workflows/                # Multi-phase workflow files
-│   ├── cross-functional-discovery.md
-│   ├── discovery-to-architecture.md
-│   └── new-feature.md
 ├── .claude/
 │   ├── settings.json         # Framework's own skill configuration
 │   ├── siblings.json         # Tracks child projects for sync
-│   └── commands/             # Framework + workflow commands
-│       ├── init-project.md          # Framework: Create new project
-│       ├── release.md               # Framework: Tag release & sync
-│       ├── new-skill.md             # Framework: Scaffold skill
-│       ├── validate-skill.md        # Framework: Check skill quality
-│       ├── prepare-release.md       # Framework: Update CHANGELOG
-│       └── cross-functional-discovery.md  # Workflow: Synced to projects
+│   ├── skills/               # 10 specialist agent definitions
+│   │   ├── product-manager/
+│   │   ├── architect/
+│   │   ├── developer/
+│   │   ├── reviewer/
+│   │   ├── legal-consultant/
+│   │   ├── facilitator/
+│   │   ├── ux-researcher/
+│   │   ├── growth-strategist/
+│   │   ├── data-analyst/
+│   │   └── performance-marketer/
+│   ├── commands/             # Framework + workflow commands
+│   │   ├── init-project.md          # Framework: Create new project
+│   │   ├── release.md               # Framework: Tag release & sync
+│   │   ├── new-skill.md             # Framework: Scaffold skill
+│   │   ├── validate-skill.md        # Framework: Check skill quality
+│   │   ├── prepare-release.md       # Framework: Update CHANGELOG
+│   │   └── cross-functional-discovery.md  # Workflow: Synced to projects
+│   └── workflows/            # Workflow files (synced to projects)
+│       ├── cross-functional-discovery.md
+│       ├── discovery-to-architecture.md
+│       └── new-feature.md
 ├── templates/
 │   └── child-project/        # Templates for /init-project
 └── projects/                 # Child projects (gitignored)
@@ -44,10 +44,11 @@ ai-sdlc/                      # Framework (this repo)
 Child Project Structure:
 projects/my-startup/
 ├── .claude/
-│   ├── settings.json         # References ../../skills/
+│   ├── settings.json         # References ../../.claude/skills/
 │   ├── commands/             # Workflow commands (synced from parent)
 │   ├── workflows/            # Workflow files (synced from parent)
-│   └── skills/               # Local skill overrides
+│   └── skills/               # Local overrides — prefix _ = local only
+│       └── _my-local-skill/
 ├── docs/
 │   ├── product/
 │   ├── architecture/
@@ -55,6 +56,16 @@ projects/my-startup/
 ├── src/
 └── tests/
 ```
+
+### `_` Prefix Convention
+
+Everything lives under `.claude/` — skills, commands, and workflows follow the same rule:
+
+| | Shared (synced to siblings) | Local only (never synced) |
+|---|---|---|
+| Skills | `.claude/skills/name/` | `.claude/skills/_name/` |
+| Commands | `.claude/commands/name.md` | `.claude/commands/_name.md` |
+| Workflows | `.claude/workflows/name.md` | `.claude/workflows/_name.md` |
 
 ## Project Management
 
@@ -68,7 +79,7 @@ Use `/init-project <name>` to create a new child project:
 
 This creates `projects/my-startup/` with:
 - Own git repo and GitHub remote
-- Skills inherited via relative paths (`../../skills/`)
+- Skills inherited via relative paths (`../../.claude/skills/`)
 - Workflow commands copied to `.claude/commands/`
 - Workflow files copied to `.claude/workflows/`
 - Registered in `.claude/siblings.json` for future syncing
@@ -117,7 +128,7 @@ Located at `.claude/siblings.json`, this file tracks child projects for syncing:
 
 ### Modifying Skills
 
-1. Skills are in `skills/<name>/SKILL.md`
+1. Skills are in `.claude/skills/<name>/SKILL.md`
 2. Keep SKILL.md under 500 lines - use `references/` for details
 3. Test changes on a real project before committing
 4. Update CHANGELOG.md
@@ -128,8 +139,8 @@ Located at `.claude/siblings.json`, this file tracks child projects for syncing:
 Use command: `/new-skill <name>`
 
 This will:
-1. Create `skills/<name>/SKILL.md` with template
-2. Create `skills/<name>/references/` directory
+1. Create `.claude/skills/<name>/SKILL.md` with template
+2. Create `.claude/skills/<name>/references/` directory
 3. Remind you to register in settings files
 
 After creation, you must manually:
@@ -282,7 +293,7 @@ The framework currently provides 10 specialist agent skills:
 | `data-analyst` | Data analysis, metrics, reporting, insights |
 | `performance-marketer` | Growth-first optimization, rapid experiments, conversion |
 
-All skills are inherited by child projects via relative paths (`../../skills/`) in `.claude/settings.json`.
+All skills are inherited by child projects via relative paths (`../../.claude/skills/`) in `.claude/settings.json`.
 
 ## Key Architecture Principles
 
