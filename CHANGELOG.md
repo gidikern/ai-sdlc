@@ -7,37 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-03-13
+
 ### Changed
-- **BREAKING: Simplified architecture - removed git submodule complexity**
-  - Projects now inherit skills via relative paths (`../../skills/`) instead of submodules
-  - Removed `/update-sub-sdlc` command (no longer needed)
-  - Updated `/init-project` to create simple directory structure without submodules
-  - Updated `/release` to sync project settings.json instead of updating submodules
-  - Release sync is now cumulative: checks for ALL missing skills, not just new ones
-  - Updated siblings.json purpose: now tracks projects for skill sync, not submodule updates
-  - Existing projects (haas, health-coach) migrated from submodule to parent/child structure
-  - All documentation updated to reflect simplified architecture
+- **BREAKING: Moved `skills/` into `.claude/skills/`** — unified `_` prefix convention
+  - All skills now live under `.claude/skills/` alongside commands and workflows
+  - Child projects must update `settings.json` paths from `../../skills/` → `../../.claude/skills/`
+  - Existing projects (haas, health-coach, traast) already updated
+- Added `_` prefix convention for local-only items across all three types:
+  - Skills: `.claude/skills/_name/` — never synced to siblings
+  - Commands: `.claude/commands/_name.md` — never synced to siblings
+  - Workflows: `.claude/workflows/_name.md` — never synced to siblings
+- Updated `release.md` to filter `_`-prefixed items during sync
+- Updated `CLAUDE.md` architecture section to reflect new structure
+- Added Notion MCP server to child project template (`.mcp.json`)
 
 ### Migration Guide
-For existing projects using submodules:
-1. Remove submodule: `git submodule deinit -f ai-sdlc && git rm -f ai-sdlc`
-2. Update `.claude/settings.json`: Change paths from `./ai-sdlc/skills/` to `../../skills/`
-3. Update project `CLAUDE.md` to remove submodule references
-4. Commit changes
-
-### Added
-- **Performance Marketer skill** for growth-first tactical marketing
-  - Data-driven growth optimization and rapid experimentation
-  - Balances "ship fast and measure" with product quality
-  - Active during discovery, prioritization, and metrics discussions
-  - Works hand-in-hand with Product Manager (productive tension)
-  - Outputs: growth experiments, funnel analysis, CAC/LTV models
-- **Workflow command and workflow file sync to projects**
-  - `/init-project` now copies workflow commands (e.g., `/cross-functional-discovery`) to `.claude/commands/`
-  - `/init-project` now copies workflow files from `workflows/` to `.claude/workflows/`
-  - Framework management commands (`/init-project`, `/release`, `/new-skill`, etc.) remain parent-only
-  - `/release` now syncs three things: skills, workflow commands, and workflows
-  - Sync is cumulative across all three categories
+For existing projects using `../../skills/` paths:
+1. Update `.claude/settings.json`: Change all `../../skills/` → `../../.claude/skills/`
+2. Commit and push changes
   - Projects get `.claude/workflows/` directory for workflow reference files
   - All Claude-related files now organized under `.claude/` directory
 
